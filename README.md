@@ -12,6 +12,8 @@ But sometimes there is a situation where you might want to statically compile yo
 Perhaps you are making a version of your software on a platform which doesn't support a JVM.
 Maybe you need to share a data model or a specific algorithm on a device which your Java server application communicates with.
 It may be you've written a really small utility in Java and it makes sense that this is distributed as a small native executable.
+Or your boss has asked you to port some terrible Java code to some rubbish device you hate.
+Pop the code into Trebuchet and pull the handle.
 
 The aim of the project is not to replace a Java Virtual Machine and this project may never implement all of Java's
 features necessary to do that for arbitary programs.
@@ -32,6 +34,27 @@ Examples..
 
 * As all Java methods are virtual, demoting virtual methods to non-virtual where no type-case invocation occurs.
 * Demote heap allocated objects to local scope objects where reference doesn't escape scope.
+
+### Development Schedule
+
+Not all of Java features suit transation to C++. This should give you an idea of priority for each feature.
+
+##### Mandatory
+* Assignment, Flow control
+* Incrementing heap allocator with no garbage collection
+
+##### High Priority
+* Exceptions
+* Generational garbage collection (Manual GC runs at the end of a scope)
+
+##### Medium Priority
+* Synchronization, Transient references
+* Native implemenations of file and socket IO. 
+* Alternate implemenations of common Java Collections classes which suit native code
+
+##### Low Priority (Maybe Never. Use a JVM)
+* Reflection
+* Bytecode class loading
 
 ### Example Translation
 
@@ -58,7 +81,7 @@ Examples..
         }
 
         public abstract class Device {
-            public void expode() {
+            public void explode() {
             }
 
             public abstract int getDeviceId();
@@ -103,7 +126,7 @@ Examples..
         class Device {
         public:
             Device();
-            void expode();
+            void explode();
             virtual int getDeviceId() = 0;
         };
 
@@ -149,7 +172,7 @@ Examples..
         Device::Device() {
         }
 
-        void Device::expode() {
+        void Device::explode() {
         }
 
         /*** trebuchet.equipment.LongRangeScanner ***/

@@ -9,7 +9,7 @@ void Scanner::scan() {
 Device::Device() {
 }
 
-void Device::expode() {
+void Device::explode() {
 }
 
 /*** trebuchet.equipment.LongRangeScanner ***/

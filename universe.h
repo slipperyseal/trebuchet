@@ -13,7 +13,7 @@ public:
 class Device {
 public:
     Device();
-    void expode();
+    void explode();
     virtual int getDeviceId() = 0;
 };
 
