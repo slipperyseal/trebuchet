@@ -3,7 +3,7 @@ Trebuchet Transcompiler
 
 Trebuchet is a Java to C++ source code translator.
 
-### ZOMG WHY WOUlD YOU DO THAT??
+### ZOMG WHY WOULD YOU DO THAT??
 
 For the most part there is no good reason not to run a Java program on a Java Virtual Machine.
 Modern JVMs provide many benefits and are really really fast.
@@ -32,6 +32,8 @@ Examples..
 
 * As all Java methods are virtual, demoting virtual methods to non-virtual where no type-case invocation occurs.
 * Demote heap allocated objects to local scope objects where reference doesn't escape scope.
+
+### Example Translation
 
 #### Java input
 
