@@ -32,7 +32,7 @@ Yet there are some quick wins we can apply in the translation process to allow t
 
 Examples..
 
-* As all Java methods are virtual, demoting virtual methods to non-virtual where no type-case invocation occurs.
+* As all Java methods are virtual, demoting virtual methods to non-virtual where no type-cast occurs.
 * Demote heap allocated objects to local scope objects where reference doesn't escape scope.
 
 ### Development Schedule
@@ -48,7 +48,7 @@ Not all of Java features suit transation to C++. This should give you an idea of
 * Generational garbage collection (Manual GC runs at the end of a scope)
 
 ##### Medium Priority
-* Synchronization, Transient references
+* Synchronization, Volatile references, Threads
 * Native implemenations of file and socket IO. 
 * Alternate implemenations of common Java Collections classes which suit native code
 
