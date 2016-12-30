@@ -4,7 +4,7 @@ public class LongRangeScanner extends Device implements Scanner {
     private int range;
 
     public int getRange() {
-        return 10;
+        return this.range;
     }
 
     public void setRange(int range) {

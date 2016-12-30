@@ -1,9 +1,15 @@
 package net.catchpole.trebuchet.profile;
 
+import net.catchpole.trebuchet.code.ChangeTracker;
 import net.catchpole.trebuchet.code.CodeWriter;
 import net.catchpole.trebuchet.code.FirstPrintOptions;
 import spoon.reflect.code.CtLiteral;
+import spoon.reflect.code.CtReturn;
+import spoon.reflect.code.CtThisAccess;
+import spoon.reflect.code.CtTypeAccess;
 import spoon.reflect.declaration.*;
+import spoon.reflect.reference.CtFieldReference;
+import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.reflect.visitor.Filter;
 import spoon.support.reflect.code.CtBlockImpl;
@@ -15,7 +21,7 @@ public class ClassShovel {
     private TypeMapper typeMapper;
     private String name;
     private boolean isInterface;
-    private ModifierKind lastVisibity;
+    private ChangeTracker<ModifierKind> visibityChange = new ChangeTracker<ModifierKind>(ModifierKind.PUBLIC);
 
     private CodeWriter codeWriter;
     private CodeWriter headerWriter;
@@ -157,16 +163,18 @@ public class ClassShovel {
 
         codeWriter.println(" {");
         codeWriter.indent();
-        if (!returnType.equals("void")) {
+//        if (!returnType.equals("void")) {
             for (CtElement ctElement : ctMethod.getElements(new Filter<CtElement>() {
                 @Override
                 public boolean matches(CtElement ctElement) {
                     return ctElement instanceof CtExecutable;
                 }
             })) {
-                addExecutable((CtExecutable)ctElement);
+                System.out.println(ctMethod.getSimpleName());
+                addExecutableBlock((CtExecutable) ctElement);
+                System.out.println();
             }
-        }
+//        }
         codeWriter.outdent();
         codeWriter.println("}");
         codeWriter.println();
@@ -269,44 +277,69 @@ public class ClassShovel {
         codeWriter.print(")");
     }
 
-    private void addExecutable(CtExecutable ctExecutable) {
-        boolean result = false;
-        for (CtElement ctElement : ctExecutable.getElements(new Filter<CtElement>() {
+    private void addExecutableBlock(CtExecutable ctExecutable) {
+        for (CtElement blockElement : ctExecutable.getElements(new Filter<CtElement>() {
             @Override
             public boolean matches(CtElement ctElement) {
                 return ctElement instanceof CtBlockImpl;
             }
         })) {
-
-            for (CtElement ctElement2 : ctElement.getElements(new Filter<CtElement>() {
+            for (CtElement ctElement : blockElement.getElements(new Filter<CtElement>() {
                 @Override
                 public boolean matches(CtElement ctElement) {
                     return true;
                 }
             })) {
-                if (ctElement2 instanceof CtLiteral) {
-                    codeWriter.print("return ");
-                    codeWriter.print(ctElement2.toString());
-                    codeWriter.println(";");
-                    result = true;
-                }
+                System.out.println(ctElement.getClass().getSimpleName() + " " + ctElement.getShortRepresentation());
+                addElement(ctElement);
             }
+            codeWriter.println(";");
         }
-        if (!result) {
-            codeWriter.println("return 0;");
+    }
+
+    private void addElement(CtElement ctElement) {
+        if (ctElement instanceof CtReturn) {
+            codeWriter.print("return ");
+        }
+        if (ctElement instanceof CtLiteral) {
+            CtLiteral ctLiteral = (CtLiteral)ctElement;
+            codeWriter.print(ctLiteral.getValue());
+        }
+        if (ctElement instanceof CtFieldReference) {
+            CtFieldReference ctFieldReference = (CtFieldReference)ctElement;
+            codeWriter.print("this->");
+            codeWriter.print(ctFieldReference.getSimpleName());
+        }
+        if (ctElement instanceof CtThisAccess) {
+            CtThisAccess ctThisAccess = (CtThisAccess)ctElement;
+            System.out.println("CtThisAccess: " + ctThisAccess.getShortRepresentation());
+
+        }
+        if (ctElement instanceof CtTypeReference) {
+            CtTypeReference ctTypeReference = (CtTypeReference)ctElement;
+            System.out.println("CtTypeReference: " + ctTypeReference.getQualifiedName());
+        }
+        if (ctElement instanceof CtPackageReference) {
+            CtPackageReference ctPackageReference = (CtPackageReference)ctElement;
+            System.out.println("CtPackageReference: " + ctPackageReference.getDeclaration().getQualifiedName());
+
+        }
+        if (ctElement instanceof CtTypeAccess) {
+            CtTypeAccess ctTypeAccess = (CtTypeAccess)ctElement;
+            System.out.println("CtTypeAccess: " + ctTypeAccess.getType().getQualifiedName());
+        }
+        if (ctElement instanceof CtTypeReference) {
+            CtTypeReference ctTypeReference = (CtTypeReference)ctElement;
+            System.out.println("CtTypeReference: " + ctTypeReference.getSimpleName());
         }
     }
 
     private void addVisibility(ModifierKind modifierKind) {
-        if (modifierKind != null && lastVisibity != null && modifierKind.equals(lastVisibity)) {
-            return;
+        ModifierKind printModifier = visibityChange.changedValue(modifierKind);
+        if (printModifier != null) {
+            headerWriter.print(printModifier);
+            headerWriter.println(':');
         }
-        if (modifierKind == null) {
-            modifierKind = ModifierKind.PUBLIC;
-        }
-        headerWriter.print(modifierKind);
-        headerWriter.println(':');
-        this.lastVisibity = modifierKind;
     }
 
     public String toString() {
