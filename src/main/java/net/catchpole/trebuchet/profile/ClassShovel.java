@@ -3,6 +3,8 @@ package net.catchpole.trebuchet.profile;
 import net.catchpole.trebuchet.code.ChangeTracker;
 import net.catchpole.trebuchet.code.CodeWriter;
 import net.catchpole.trebuchet.code.FirstPrintOptions;
+import net.catchpole.trebuchet.spoon.MatchAllFilter;
+import net.catchpole.trebuchet.spoon.MatchTypeFilter;
 import spoon.reflect.code.CtLiteral;
 import spoon.reflect.code.CtReturn;
 import spoon.reflect.code.CtThisAccess;
@@ -11,7 +13,6 @@ import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtFieldReference;
 import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.reference.CtTypeReference;
-import spoon.reflect.visitor.Filter;
 import spoon.support.reflect.code.CtBlockImpl;
 
 import java.util.List;
@@ -163,18 +164,13 @@ public class ClassShovel {
 
         codeWriter.println(" {");
         codeWriter.indent();
-//        if (!returnType.equals("void")) {
-            for (CtElement ctElement : ctMethod.getElements(new Filter<CtElement>() {
-                @Override
-                public boolean matches(CtElement ctElement) {
-                    return ctElement instanceof CtExecutable;
-                }
-            })) {
-                System.out.println(ctMethod.getSimpleName());
-                addExecutableBlock((CtExecutable) ctElement);
-                System.out.println();
-            }
-//        }
+
+        for (CtElement ctElement : ctMethod.getElements(new MatchTypeFilter<CtElement>(CtExecutable.class))) {
+            System.out.println(">>>>>>> " + ctMethod.getSimpleName());
+            addExecutableBlock((CtExecutable) ctElement);
+            System.out.println();
+        }
+
         codeWriter.outdent();
         codeWriter.println("}");
         codeWriter.println();
@@ -278,19 +274,9 @@ public class ClassShovel {
     }
 
     private void addExecutableBlock(CtExecutable ctExecutable) {
-        for (CtElement blockElement : ctExecutable.getElements(new Filter<CtElement>() {
-            @Override
-            public boolean matches(CtElement ctElement) {
-                return ctElement instanceof CtBlockImpl;
-            }
-        })) {
-            for (CtElement ctElement : blockElement.getElements(new Filter<CtElement>() {
-                @Override
-                public boolean matches(CtElement ctElement) {
-                    return true;
-                }
-            })) {
-                System.out.println(ctElement.getClass().getSimpleName() + " " + ctElement.getShortRepresentation());
+        for (CtElement blockElement : ctExecutable.getElements(new MatchTypeFilter<CtElement>(CtBlockImpl.class))) {
+            for (CtElement ctElement : blockElement.getElements(new MatchAllFilter<CtElement>())) {
+                System.out.println("---" + ctElement.getClass().getSimpleName() + " " + ctElement.getShortRepresentation());
                 addElement(ctElement);
             }
             codeWriter.println(";");

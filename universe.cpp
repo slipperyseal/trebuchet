@@ -22,6 +22,7 @@ int LongRangeScanner::getRange() {
 }
 
 void LongRangeScanner::setRange(int range) {
+    this->range;
 }
 
 void LongRangeScanner::scan() {
