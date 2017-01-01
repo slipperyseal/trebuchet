@@ -150,6 +150,13 @@ public class ClassShovel {
         codeWriter.println(" {");
         codeWriter.indent();
         addFieldInitializers();
+
+        for (CtElement ctElement : ctConstructor.getElements(new MatchTypeFilter<CtElement>(CtExecutable.class))) {
+            System.out.println(ctConstructor.getSimpleName());
+            addExecutableBlock((CtExecutable) ctElement);
+            System.out.println();
+        }
+
         codeWriter.outdent();
         codeWriter.println("}");
         codeWriter.println();

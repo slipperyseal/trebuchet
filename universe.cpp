@@ -36,6 +36,7 @@ int Spaceship::FIRSTSHIP = 100;
 
 Spaceship::Spaceship(LongRangeScanner * longRangeScanner) {
     this->serialNumber = 120;
+    this->longRangeScanner = longRangeScanner;
 }
 
 LongRangeScanner * Spaceship::getLongRangeScanner() {

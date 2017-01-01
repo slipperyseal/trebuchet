@@ -206,6 +206,7 @@ This demonstrates the output C++ headers and code from the classes of our test c
 
         Spaceship::Spaceship(LongRangeScanner * longRangeScanner) {
             this->serialNumber = 120;
+            this->longRangeScanner = longRangeScanner;
         }
 
         LongRangeScanner * Spaceship::getLongRangeScanner() {
