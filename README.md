@@ -93,7 +93,7 @@ This demonstrates the output C++ headers and code from the classes of our test c
             private int range;
 
             public int getRange() {
-                return 10;
+                return this.range;
             }
 
             public void setRange(int range) {
