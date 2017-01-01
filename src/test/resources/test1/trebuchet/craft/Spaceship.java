@@ -17,5 +17,7 @@ public class Spaceship {
 	}
 
 	public void reset(LongRangeScanner longRangeScanner, int serialNumber) {
+		this.longRangeScanner = longRangeScanner;
+		this.serialNumber = serialNumber;
 	}
 }

@@ -5,11 +5,13 @@ class LongRangeScanner;
 class Spaceship;
 class Universe;
 
+/*** trebuchet.equipment.Scanner ***/
 class Scanner {
 public:
     virtual void scan() = 0;
 };
 
+/*** trebuchet.equipment.Device ***/
 class Device {
 public:
     Device();
@@ -17,6 +19,7 @@ public:
     virtual int getDeviceId() = 0;
 };
 
+/*** trebuchet.equipment.LongRangeScanner ***/
 class LongRangeScanner: public Device, public Scanner {
 private:
     int range;
@@ -29,6 +32,7 @@ public:
     int getDeviceId();
 };
 
+/*** trebuchet.craft.Spaceship ***/
 class Spaceship {
 public:
     static int FIRSTSHIP;
@@ -43,6 +47,7 @@ public:
     void reset(LongRangeScanner * longRangeScanner, int serialNumber);
 };
 
+/*** trebuchet.Universe ***/
 class Universe {
 public:
     Universe();

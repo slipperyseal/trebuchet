@@ -12,7 +12,7 @@ But sometimes there is a situation where you might want to statically compile yo
 Perhaps you are making a version of your software on a platform which doesn't support a JVM.
 Maybe you need to share a data model or a specific algorithm on a device which your Java server application communicates with.
 It may be you've written a really small utility in Java and it makes sense that this is distributed as a small native executable.
-Or your boss has asked you to port some terrible Java code to some rubbish device you hate.
+Or your boss has asked you to port some terrible Java code to some rubbish device.
 Pop the code into Trebuchet and pull the handle.
 
 The aim of the project is not to replace a Java Virtual Machine and this project may never implement all of Java's
@@ -23,7 +23,7 @@ The output C++ isn't meant to be read and maintained in it's own right but we'll
 
 ### Current status
 
-The project is quite young but is currently generating class headers and simple method stubs for a specific test case.
+The project is quite young but is currently generating class headers and simple getters and setters for our specific test case.
 
 ### Optimisations
 
@@ -57,6 +57,8 @@ Not all of Java features suit transation to C++. This should give you an idea of
 * Bytecode class loading
 
 ### Example Translation
+
+This demonstrates the output C++ headers and code from the classes of our test case.
 
 #### Java input
 
@@ -118,11 +120,13 @@ Not all of Java features suit transation to C++. This should give you an idea of
         class Spaceship;
         class Universe;
 
+        /*** trebuchet.equipment.Scanner ***/
         class Scanner {
         public:
             virtual void scan() = 0;
         };
 
+        /*** trebuchet.equipment.Device ***/
         class Device {
         public:
             Device();
@@ -130,6 +134,7 @@ Not all of Java features suit transation to C++. This should give you an idea of
             virtual int getDeviceId() = 0;
         };
 
+        /*** trebuchet.equipment.LongRangeScanner ***/
         class LongRangeScanner: public Device, public Scanner {
         private:
             int range;
@@ -142,6 +147,7 @@ Not all of Java features suit transation to C++. This should give you an idea of
             int getDeviceId();
         };
 
+        /*** trebuchet.craft.Spaceship ***/
         class Spaceship {
         public:
             static int FIRSTSHIP;
@@ -156,6 +162,7 @@ Not all of Java features suit transation to C++. This should give you an idea of
             void reset(LongRangeScanner * longRangeScanner, int serialNumber);
         };
 
+        /*** trebuchet.Universe ***/
         class Universe {
         public:
             Universe();
@@ -180,10 +187,11 @@ Not all of Java features suit transation to C++. This should give you an idea of
         }
 
         int LongRangeScanner::getRange() {
-            return 10;
+            return this->range;
         }
 
         void LongRangeScanner::setRange(int range) {
+            this->range = range;
         }
 
         void LongRangeScanner::scan() {
@@ -201,10 +209,12 @@ Not all of Java features suit transation to C++. This should give you an idea of
         }
 
         LongRangeScanner * Spaceship::getLongRangeScanner() {
-            return 0;
+            return this->longRangeScanner;
         }
 
         void Spaceship::reset(LongRangeScanner * longRangeScanner, int serialNumber) {
+            this->longRangeScanner = longRangeScanner;
+            this->serialNumber = serialNumber;
         }
 
         /*** trebuchet.Universe ***/
@@ -218,4 +228,3 @@ Not all of Java features suit transation to C++. This should give you an idea of
             Universe::main(0);
             return 0;
         }
-

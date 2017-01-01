@@ -5,13 +5,11 @@ import net.catchpole.trebuchet.code.CodeWriter;
 import net.catchpole.trebuchet.code.FirstPrintOptions;
 import net.catchpole.trebuchet.spoon.MatchAllFilter;
 import net.catchpole.trebuchet.spoon.MatchTypeFilter;
-import spoon.reflect.code.CtLiteral;
-import spoon.reflect.code.CtReturn;
-import spoon.reflect.code.CtThisAccess;
-import spoon.reflect.code.CtTypeAccess;
+import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtFieldReference;
 import spoon.reflect.reference.CtPackageReference;
+import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 import spoon.support.reflect.code.CtBlockImpl;
 
@@ -68,6 +66,10 @@ public class ClassShovel {
         codeWriter.print("/*** ");
         codeWriter.print(ctType.getQualifiedName());
         codeWriter.println(" ***/");
+
+        headerWriter.print("/*** ");
+        headerWriter.print(ctType.getQualifiedName());
+        headerWriter.println(" ***/");
 
         addClassSignature(ctType);
         headerWriter.println(" {");
@@ -166,7 +168,7 @@ public class ClassShovel {
         codeWriter.indent();
 
         for (CtElement ctElement : ctMethod.getElements(new MatchTypeFilter<CtElement>(CtExecutable.class))) {
-            System.out.println(">>>>>>> " + ctMethod.getSimpleName());
+            System.out.println(ctMethod.getSimpleName());
             addExecutableBlock((CtExecutable) ctElement);
             System.out.println();
         }
@@ -276,11 +278,21 @@ public class ClassShovel {
     private void addExecutableBlock(CtExecutable ctExecutable) {
         for (CtElement blockElement : ctExecutable.getElements(new MatchTypeFilter<CtElement>(CtBlockImpl.class))) {
             for (CtElement ctElement : blockElement.getElements(new MatchAllFilter<CtElement>())) {
-                System.out.println("---" + ctElement.getClass().getSimpleName() + " " + ctElement.getShortRepresentation());
+                System.out.println(ctElement.getClass().getSimpleName() + " " + ctElement.toString());
                 addElement(ctElement);
             }
-            codeWriter.println(";");
         }
+    }
+
+    private String deferred;
+
+    private boolean doDeferred() {
+        if (deferred != null) {
+            codeWriter.print(deferred);
+            deferred = null;
+            return true;
+        }
+        return false;
     }
 
     private void addElement(CtElement ctElement) {
@@ -290,33 +302,37 @@ public class ClassShovel {
         if (ctElement instanceof CtLiteral) {
             CtLiteral ctLiteral = (CtLiteral)ctElement;
             codeWriter.print(ctLiteral.getValue());
+            codeWriter.println(';');
         }
         if (ctElement instanceof CtFieldReference) {
             CtFieldReference ctFieldReference = (CtFieldReference)ctElement;
-            codeWriter.print("this->");
             codeWriter.print(ctFieldReference.getSimpleName());
+            if (!doDeferred()) {
+                codeWriter.println(';');
+            }
+        }
+        if (ctElement instanceof CtFieldWrite) {
+            CtFieldWrite ctFieldWrite = (CtFieldWrite)ctElement;
+            deferred = " = ";
         }
         if (ctElement instanceof CtThisAccess) {
             CtThisAccess ctThisAccess = (CtThisAccess)ctElement;
-            System.out.println("CtThisAccess: " + ctThisAccess.getShortRepresentation());
-
+            codeWriter.print("this->");
         }
         if (ctElement instanceof CtTypeReference) {
             CtTypeReference ctTypeReference = (CtTypeReference)ctElement;
-            System.out.println("CtTypeReference: " + ctTypeReference.getQualifiedName());
         }
         if (ctElement instanceof CtPackageReference) {
             CtPackageReference ctPackageReference = (CtPackageReference)ctElement;
-            System.out.println("CtPackageReference: " + ctPackageReference.getDeclaration().getQualifiedName());
 
         }
         if (ctElement instanceof CtTypeAccess) {
             CtTypeAccess ctTypeAccess = (CtTypeAccess)ctElement;
-            System.out.println("CtTypeAccess: " + ctTypeAccess.getType().getQualifiedName());
         }
-        if (ctElement instanceof CtTypeReference) {
-            CtTypeReference ctTypeReference = (CtTypeReference)ctElement;
-            System.out.println("CtTypeReference: " + ctTypeReference.getSimpleName());
+        if (ctElement instanceof CtParameterReference) {
+            CtParameterReference ctParameterReference = (CtParameterReference)ctElement;
+            codeWriter.print(ctParameterReference.getSimpleName());
+            codeWriter.println(';');
         }
     }
 

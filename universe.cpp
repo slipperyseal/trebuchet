@@ -10,7 +10,6 @@ Device::Device() {
 }
 
 void Device::explode() {
-    ;
 }
 
 /*** trebuchet.equipment.LongRangeScanner ***/
@@ -22,11 +21,10 @@ int LongRangeScanner::getRange() {
 }
 
 void LongRangeScanner::setRange(int range) {
-    this->range;
+    this->range = range;
 }
 
 void LongRangeScanner::scan() {
-    ;
 }
 
 int LongRangeScanner::getDeviceId() {
@@ -45,7 +43,8 @@ LongRangeScanner * Spaceship::getLongRangeScanner() {
 }
 
 void Spaceship::reset(LongRangeScanner * longRangeScanner, int serialNumber) {
-    ;
+    this->longRangeScanner = longRangeScanner;
+    this->serialNumber = serialNumber;
 }
 
 /*** trebuchet.Universe ***/
@@ -53,7 +52,6 @@ Universe::Universe() {
 }
 
 void Universe::main(char ** args) {
-    ;
 }
 
 int main(int argc, char* argv[]) {
