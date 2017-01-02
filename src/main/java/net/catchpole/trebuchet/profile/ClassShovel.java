@@ -4,18 +4,18 @@ import net.catchpole.trebuchet.code.ChangeTracker;
 import net.catchpole.trebuchet.code.CodeWriter;
 import net.catchpole.trebuchet.code.FirstPrintOptions;
 import net.catchpole.trebuchet.spoon.MatchAllFilter;
-import net.catchpole.trebuchet.spoon.MatchTypeFilter;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
 import spoon.reflect.reference.CtFieldReference;
 import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtTypeReference;
-import spoon.support.reflect.code.CtBlockImpl;
 
 import java.util.List;
 
 public class ClassShovel {
+    private static BinaryOperatorKindMapping binaryOperatorKindMapping = new BinaryOperatorKindMapping();
+
     private CtType ctType;
     private TypeMapper typeMapper;
     private String name;
@@ -24,7 +24,7 @@ public class ClassShovel {
 
     private CodeWriter codeWriter;
     private CodeWriter headerWriter;
-    private FieldShovel fieldShovel;
+    private FieldGroups fieldGroups;
 
     public ClassShovel(CtType ctType, CodeWriter headerWriter, CodeWriter codeWriter, TypeMapper typeMapper) {
         this.ctType = ctType;
@@ -74,13 +74,13 @@ public class ClassShovel {
         addClassSignature(ctType);
         headerWriter.println(" {");
 
-        this.fieldShovel = new FieldShovel(ctType);
+        this.fieldGroups = new FieldGroups(ctType);
 
-        for (CtField ctField : fieldShovel.getAllFields()) {
+        for (CtField ctField : fieldGroups.getAllFields()) {
             addField(ctField);
         }
 
-        if (!fieldShovel.getAllFields().isEmpty()) {
+        if (!fieldGroups.getAllFields().isEmpty()) {
             headerWriter.println();
         }
 
@@ -108,8 +108,8 @@ public class ClassShovel {
         headerWriter.println("};");
         headerWriter.println();
 
-        if (!fieldShovel.getStaticInitializedFields().isEmpty()) {
-            addStaticInitializers(fieldShovel);
+        if (!fieldGroups.getStaticInitializedFields().isEmpty()) {
+            addStaticInitializers(fieldGroups);
         }
 
         for (CtTypeMember ctTypeMember : (List<CtTypeMember>)ctType.getTypeMembers()) {
@@ -151,11 +151,7 @@ public class ClassShovel {
         codeWriter.indent();
         addFieldInitializers();
 
-        for (CtElement ctElement : ctConstructor.getElements(new MatchTypeFilter<CtElement>(CtExecutable.class))) {
-            System.out.println(ctConstructor.getSimpleName());
-            addExecutableBlock((CtExecutable) ctElement);
-            System.out.println();
-        }
+        addBlock(ctConstructor.getBody());
 
         codeWriter.outdent();
         codeWriter.println("}");
@@ -174,15 +170,28 @@ public class ClassShovel {
         codeWriter.println(" {");
         codeWriter.indent();
 
-        for (CtElement ctElement : ctMethod.getElements(new MatchTypeFilter<CtElement>(CtExecutable.class))) {
-            System.out.println(ctMethod.getSimpleName());
-            addExecutableBlock((CtExecutable) ctElement);
-            System.out.println();
-        }
+        addBlock(ctMethod.getBody());
 
         codeWriter.outdent();
         codeWriter.println("}");
         codeWriter.println();
+    }
+
+    private void addBlock(CtBlock ctBlock) {
+        if (ctBlock == null) {
+            return;
+        }
+        for (CtStatement ctStatement : ctBlock.getStatements()) {
+            System.out.println("STATEMENT: " + ctStatement);
+            if (ctStatement.toString().equals("super()")) {
+                continue;
+            }
+            for (CtElement ctElement : ctStatement.getElements(new MatchAllFilter<CtElement>())) {
+                System.out.println("  ELEMENT: " + ctElement.getClass().getSimpleName() + " " + ctElement);
+                addElement(ctElement);
+            }
+            codeWriter.println(";");
+        }
     }
 
     private void addClassSignature(CtType ctType) {
@@ -203,15 +212,15 @@ public class ClassShovel {
         }
     }
 
-    private void addStaticInitializers(FieldShovel fieldShovel) {
-        for (CtField ctField : fieldShovel.getStaticInitializedFields()) {
+    private void addStaticInitializers(FieldGroups fieldGroups) {
+        for (CtField ctField : fieldGroups.getStaticInitializedFields()) {
             codeWriter.print(typeMapper.getTypeName(ctField.getType()));
             codeWriter.print(' ');
             codeWriter.print(typeMapper.getTypeName(ctField.getDeclaringType()));
             codeWriter.print("::");
             codeWriter.print(ctField.getSimpleName());
             codeWriter.print(" = ");
-            for (CtLiteral ctLiteral : fieldShovel.getFieldInitializer(ctField)) {
+            for (CtLiteral ctLiteral : fieldGroups.getFieldInitializer(ctField)) {
                 codeWriter.print(ctLiteral);
             }
             codeWriter.println(';');
@@ -233,14 +242,17 @@ public class ClassShovel {
     }
 
     private void addFieldInitializers() {
-        for (CtField ctField : fieldShovel.getMemberInitializedFields()) {
+        for (CtField ctField : fieldGroups.getMemberInitializedFields()) {
             codeWriter.print("this->");
             codeWriter.print(ctField.getSimpleName());
             codeWriter.print(" = ");
-            for (CtLiteral ctLiteral : fieldShovel.getFieldInitializer(ctField)) {
+            for (CtLiteral ctLiteral : fieldGroups.getFieldInitializer(ctField)) {
                 codeWriter.print(ctLiteral);
             }
             codeWriter.println(';');
+        }
+        if (!fieldGroups.getMemberInitializedFields().isEmpty()) {
+            codeWriter.println();
         }
     }
 
@@ -282,15 +294,6 @@ public class ClassShovel {
         codeWriter.print(")");
     }
 
-    private void addExecutableBlock(CtExecutable ctExecutable) {
-        for (CtElement blockElement : ctExecutable.getElements(new MatchTypeFilter<CtElement>(CtBlockImpl.class))) {
-            for (CtElement ctElement : blockElement.getElements(new MatchAllFilter<CtElement>())) {
-                System.out.println(ctElement.getClass().getSimpleName() + " " + ctElement.toString());
-                addElement(ctElement);
-            }
-        }
-    }
-
     private String deferred;
 
     private boolean doDeferred() {
@@ -313,14 +316,11 @@ public class ClassShovel {
                 value = "0";
             }
             codeWriter.print(value);
-            codeWriter.println(';');
         }
         if (ctElement instanceof CtFieldReference) {
             CtFieldReference ctFieldReference = (CtFieldReference)ctElement;
             codeWriter.print(ctFieldReference.getSimpleName());
-            if (!doDeferred()) {
-                codeWriter.println(';');
-            }
+            doDeferred();
         }
         if (ctElement instanceof CtFieldWrite) {
             CtFieldWrite ctFieldWrite = (CtFieldWrite)ctElement;
@@ -335,7 +335,6 @@ public class ClassShovel {
         }
         if (ctElement instanceof CtPackageReference) {
             CtPackageReference ctPackageReference = (CtPackageReference)ctElement;
-
         }
         if (ctElement instanceof CtTypeAccess) {
             CtTypeAccess ctTypeAccess = (CtTypeAccess)ctElement;
@@ -343,7 +342,12 @@ public class ClassShovel {
         if (ctElement instanceof CtParameterReference) {
             CtParameterReference ctParameterReference = (CtParameterReference)ctElement;
             codeWriter.print(ctParameterReference.getSimpleName());
-            codeWriter.println(';');
+        }
+        if (ctElement instanceof CtBinaryOperator) {
+            CtBinaryOperator ctBinaryOperator = (CtBinaryOperator)ctElement;
+
+            String value = binaryOperatorKindMapping.getMapping(ctBinaryOperator.getKind());
+            deferred = " " + value + " ";
         }
     }
 

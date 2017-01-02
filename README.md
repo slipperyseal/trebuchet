@@ -45,6 +45,7 @@ Not all of Java features suit transation to C++. This should give you an idea of
 
 ##### High Priority
 * Exceptions
+* Generics need not be implemented as templates. Type erasure should be able to be converted to simple type casts.
 * Generational garbage collection (Manual GC runs at the end of a scope)
 
 ##### Medium Priority
@@ -63,23 +64,23 @@ This demonstrates the output C++ headers and code from the classes of our test c
 #### Java input
 
         public class Spaceship {
-            public static final int FIRSTSHIP = 100;
-            private String name;
-            private int serialNumber = 120;
-            private LongRangeScanner longRangeScanner;
+        	public static final int FIRSTSHIP = 100;
+        	private String name = "Nostromo";
+        	private int serialNumber = 120;
+        	private LongRangeScanner longRangeScanner;
 
-            public Spaceship(LongRangeScanner longRangeScanner) {
-                this.longRangeScanner = longRangeScanner;
-            }
+        	public Spaceship(LongRangeScanner longRangeScanner) {
+        		this.longRangeScanner = longRangeScanner;
+        	}
 
-            public LongRangeScanner getLongRangeScanner() {
-                return longRangeScanner;
-            }
+        	public LongRangeScanner getLongRangeScanner() {
+        		return longRangeScanner;
+        	}
 
-            public void reset(LongRangeScanner longRangeScanner, int serialNumber) {
-                this.longRangeScanner = longRangeScanner;
-                this.serialNumber = serialNumber;
-            }
+        	public void reset(LongRangeScanner longRangeScanner, int serialNumber) {
+        		this.longRangeScanner = longRangeScanner;
+        		this.serialNumber = serialNumber;
+        	}
         }
 
         public abstract class Device {
@@ -101,10 +102,12 @@ This demonstrates the output C++ headers and code from the classes of our test c
             }
 
             public void scan() {
+                range = range + 2;
+                range = range - 1;
             }
 
             public int getDeviceId() {
-                return 1;
+                return 1337;
             }
         }
 
@@ -152,7 +155,7 @@ This demonstrates the output C++ headers and code from the classes of our test c
         public:
             static int FIRSTSHIP;
         private:
-            char * name;
+            const char * name;
             int serialNumber;
             LongRangeScanner * longRangeScanner;
 
@@ -166,7 +169,7 @@ This demonstrates the output C++ headers and code from the classes of our test c
         class Universe {
         public:
             Universe();
-            static void main(char ** args);
+            static void main(char ** * args);
         };
 
 #### C++ code output
@@ -195,17 +198,21 @@ This demonstrates the output C++ headers and code from the classes of our test c
         }
 
         void LongRangeScanner::scan() {
+            this->range = this->range + 2;
+            this->range = this->range - 1;
         }
 
         int LongRangeScanner::getDeviceId() {
-            return 1;
+            return 1337;
         }
 
         /*** trebuchet.craft.Spaceship ***/
         int Spaceship::FIRSTSHIP = 100;
 
         Spaceship::Spaceship(LongRangeScanner * longRangeScanner) {
+            this->name = "Nostromo";
             this->serialNumber = 120;
+
             this->longRangeScanner = longRangeScanner;
         }
 
@@ -222,7 +229,8 @@ This demonstrates the output C++ headers and code from the classes of our test c
         Universe::Universe() {
         }
 
-        void Universe::main(char ** args) {
+        void Universe::main(char ** * args) {
+            ;
         }
 
         int main(int argc, char* argv[]) {

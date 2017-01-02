@@ -4,7 +4,7 @@ import trebuchet.equipment.LongRangeScanner;
 
 public class Spaceship {
 	public static final int FIRSTSHIP = 100;
-	private String name;
+	private String name = "Nostromo";
 	private int serialNumber = 120;
 	private LongRangeScanner longRangeScanner;
 

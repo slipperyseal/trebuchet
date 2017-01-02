@@ -38,7 +38,7 @@ class Spaceship {
 public:
     static int FIRSTSHIP;
 private:
-    char * * name;
+    const char * name;
     int serialNumber;
     LongRangeScanner * longRangeScanner;
 
@@ -65,7 +65,7 @@ public:
 protected:
     Object * clone();
 public:
-    char * * toString();
+    const char * toString();
     void notify();
     void notifyAll();
     void wait(long long timeout);

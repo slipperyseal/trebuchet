@@ -25,17 +25,21 @@ void LongRangeScanner::setRange(int range) {
 }
 
 void LongRangeScanner::scan() {
+    this->range = this->range + 2;
+    this->range = this->range - 1;
 }
 
 int LongRangeScanner::getDeviceId() {
-    return 1;
+    return 1337;
 }
 
 /*** trebuchet.craft.Spaceship ***/
 int Spaceship::FIRSTSHIP = 100;
 
 Spaceship::Spaceship(LongRangeScanner * longRangeScanner) {
+    this->name = "Nostromo";
     this->serialNumber = 120;
+    
     this->longRangeScanner = longRangeScanner;
 }
 
@@ -53,6 +57,7 @@ Universe::Universe() {
 }
 
 void Universe::main(char ** * args) {
+    ;
 }
 
 int main(int argc, char* argv[]) {
@@ -80,7 +85,7 @@ Object * Object::clone() {
     return 0;
 }
 
-char * * Object::toString() {
+const char * Object::toString() {
     return 0;
 }
 

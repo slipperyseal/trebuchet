@@ -7,14 +7,14 @@ import spoon.reflect.visitor.Filter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FieldShovel {
+public class FieldGroups {
     private List<CtField> allFields = new ArrayList<CtField>();
     private List<CtField> staticFields = new ArrayList<CtField>();
     private List<CtField> staticInitializedFields = new ArrayList<CtField>();
     private List<CtField> memberFields = new ArrayList<CtField>();
     private List<CtField> memberInitializedFields = new ArrayList<CtField>();
 
-    public FieldShovel(CtType ctType) {
+    public FieldGroups(CtType ctType) {
         for (CtTypeMember ctTypeMember : (List<CtTypeMember>) ctType.getTypeMembers()) {
             if (ctTypeMember instanceof CtField) {
                 CtField ctField = (CtField)ctTypeMember;
