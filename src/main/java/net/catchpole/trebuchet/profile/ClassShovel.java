@@ -308,7 +308,11 @@ public class ClassShovel {
         }
         if (ctElement instanceof CtLiteral) {
             CtLiteral ctLiteral = (CtLiteral)ctElement;
-            codeWriter.print(ctLiteral.getValue());
+            Object value = ctLiteral.getValue();
+            if (value == null) {
+                value = "0";
+            }
+            codeWriter.print(value);
             codeWriter.println(';');
         }
         if (ctElement instanceof CtFieldReference) {

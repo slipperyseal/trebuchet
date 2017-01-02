@@ -6,6 +6,6 @@ public class TrebuchetTest {
 	@Test
 	public void testTrebuchet() throws Exception {
 		Trebuchet trebuchet = new Trebuchet();
-		trebuchet.process("universe", "src/test/resources/test1/trebuchet/");
+		trebuchet.process("universe", "src/test/resources/test1/");
 	}
 }

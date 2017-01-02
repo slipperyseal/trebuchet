@@ -4,6 +4,7 @@ class Device;
 class LongRangeScanner;
 class Spaceship;
 class Universe;
+class Object;
 
 /*** trebuchet.equipment.Scanner ***/
 class Scanner {
@@ -37,7 +38,7 @@ class Spaceship {
 public:
     static int FIRSTSHIP;
 private:
-    char * name;
+    char * * name;
     int serialNumber;
     LongRangeScanner * longRangeScanner;
 
@@ -51,6 +52,26 @@ public:
 class Universe {
 public:
     Universe();
-    static void main(char ** args);
+    static void main(char ** * args);
+};
+
+/*** java.lang.Object ***/
+class Object {
+public:
+    Object();
+    Object * getClass();
+    int hashCode();
+    bool equals(Object * obj);
+protected:
+    Object * clone();
+public:
+    char * * toString();
+    void notify();
+    void notifyAll();
+    void wait(long long timeout);
+    void wait(long long timeout, int nanos);
+    void wait();
+protected:
+    void finalize();
 };
 

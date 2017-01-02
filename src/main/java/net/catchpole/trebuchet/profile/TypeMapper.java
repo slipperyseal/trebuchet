@@ -11,13 +11,19 @@ public class TypeMapper {
     public TypeMapper() {
         typeMappings.put("java.lang.String", "char *");
         typeMappings.put("java.lang.reflect.Array", "char **");
+        typeMappings.put("boolean", "bool");
+        typeMappings.put("long", "long long");
     }
 
     public String getTypeName(CtTypeInformation ctTypeInformation) {
         String javaName = ctTypeInformation.getQualifiedName();
         String mappedName = typeMappings.get(javaName);
         if (mappedName == null) {
-            mappedName = mapName(javaName);
+            mappedName = mapClassName(javaName);
+            if (typeMappings.containsValue(mappedName)) {
+                // if short mapped name already exists dropback to explicit package_Class format
+                mappedName = javaName.replace(".","_");
+            }
             typeMappings.put(javaName, mappedName);
         }
         return mappedName;
@@ -25,17 +31,13 @@ public class TypeMapper {
 
     public String getTypeReference(CtTypeInformation ctTypeInformation) {
         String name = getTypeName(ctTypeInformation);
-        if (name.charAt(0) >= 'A' && name.charAt(0) <= 'Z') {
+        if (!ctTypeInformation.isPrimitive()) {
             return name + " *";
         }
         return name;
     }
 
-    private String mapName(String name) {
-        if (name.startsWith("java.")) {
-            return name.replace('.','_');
-        }
-
+    private String mapClassName(String name) {
         int dot = name.lastIndexOf('.');
         if (dot != -1) {
             name = name.substring(dot+1);

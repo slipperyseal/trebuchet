@@ -52,11 +52,53 @@ void Spaceship::reset(LongRangeScanner * longRangeScanner, int serialNumber) {
 Universe::Universe() {
 }
 
-void Universe::main(char ** args) {
+void Universe::main(char ** * args) {
 }
 
 int main(int argc, char* argv[]) {
     Universe::main(0);
     return 0;
+}
+
+/*** java.lang.Object ***/
+Object::Object() {
+}
+
+Object * Object::getClass() {
+    return 0;
+}
+
+int Object::hashCode() {
+    return 0;
+}
+
+bool Object::equals(Object * obj) {
+    return false;
+}
+
+Object * Object::clone() {
+    return 0;
+}
+
+char * * Object::toString() {
+    return 0;
+}
+
+void Object::notify() {
+}
+
+void Object::notifyAll() {
+}
+
+void Object::wait(long long timeout) {
+}
+
+void Object::wait(long long timeout, int nanos) {
+}
+
+void Object::wait() {
+}
+
+void Object::finalize() {
 }
 
