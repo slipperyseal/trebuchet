@@ -16,24 +16,27 @@ Or your boss has asked you to port some terrible Java code to some rubbish devic
 Pop the code into Trebuchet and pull the handle.
 
 The aim of the project is not to replace a Java Virtual Machine and this project may never implement all of Java's
-features necessary to do that for arbitary programs.
+features necessary to do that for arbitrary programs.
 
 C++ was chosen as the target language as Java and C++ have enough in common for a reasonably logical translation.
 The output C++ isn't meant to be read and maintained in it's own right but we'll certainly try to make it as well formed as we can.
 
 ### Current status
 
-The project is quite young but is currently generating class headers and simple getters and setters for our specific test case.
+The project is quite young but is currently generating class headers and simple arithmetic, assignment and return values, for our specific test case.
+See the code before for what it can currently do.
 
 ### Optimisations
 
-Modern C++ compilers produce amazing optimizations. So for the most part we will rely on this to do most of the heavy lifting.
-Yet there are some quick wins we can apply in the translation process to allow the C++ compiler to optimize optimally.
+Modern C++ compilers can produce some amazing optimizations. So we will rely on these tools to do most of the heavy lifting.
+Yet there are some quick wins we can apply in the translation process to help the C++ compiler to optimize optimally.
 
 Examples..
 
-* As all Java methods are virtual, demoting virtual methods to non-virtual where no type-cast occurs.
-* Demote heap allocated objects to local scope objects where reference doesn't escape scope.
+* As all Java methods are virtual, demoting virtual methods to non-virtual where no type-cast can occur.
+* Demote heap allocated objects to local scope where reference doesn't escape scope.
+* Convert regular getters and setters to direct field access.
+* Optionally disable index and type safety checks.
 
 ### Development Schedule
 

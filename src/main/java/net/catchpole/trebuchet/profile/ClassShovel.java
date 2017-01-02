@@ -14,7 +14,7 @@ import spoon.reflect.reference.CtTypeReference;
 import java.util.List;
 
 public class ClassShovel {
-    private static BinaryOperatorKindMapping binaryOperatorKindMapping = new BinaryOperatorKindMapping();
+    private static BinaryOperatorMapping binaryOperatorMapping = new BinaryOperatorMapping();
 
     private CtType ctType;
     private TypeMapper typeMapper;
@@ -181,6 +181,7 @@ public class ClassShovel {
         if (ctBlock == null) {
             return;
         }
+        System.out.println("BLOCK: " + ctBlock.getParent().toString());
         for (CtStatement ctStatement : ctBlock.getStatements()) {
             System.out.println("STATEMENT: " + ctStatement);
             if (ctStatement.toString().equals("super()")) {
@@ -345,9 +346,12 @@ public class ClassShovel {
         }
         if (ctElement instanceof CtBinaryOperator) {
             CtBinaryOperator ctBinaryOperator = (CtBinaryOperator)ctElement;
-
-            String value = binaryOperatorKindMapping.getMapping(ctBinaryOperator.getKind());
+            String value = binaryOperatorMapping.getMapping(ctBinaryOperator.getKind());
             deferred = " " + value + " ";
+        }
+        if (ctElement instanceof CtConstructorCall) {
+            CtConstructorCall ctConstructorCall = (CtConstructorCall)ctElement;
+            System.out.println(ctConstructorCall.getShortRepresentation());
         }
     }
 
