@@ -1,3 +1,4 @@
+#include <stdio.h>
 
 #include "universe.h"
 
@@ -57,7 +58,8 @@ Universe::Universe() {
 }
 
 void Universe::main(char ** * args) {
-    ;
+    Spaceship * spaceship = new Spaceship(new LongRangeScanner());
+    printf("getDeviceId %d\n", spaceship->getLongRangeScanner()->getDeviceId());
 }
 
 int main(int argc, char* argv[]) {

@@ -6,10 +6,7 @@ import net.catchpole.trebuchet.code.FirstPrintOptions;
 import net.catchpole.trebuchet.spoon.MatchAllFilter;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
-import spoon.reflect.reference.CtFieldReference;
-import spoon.reflect.reference.CtPackageReference;
-import spoon.reflect.reference.CtParameterReference;
-import spoon.reflect.reference.CtTypeReference;
+import spoon.reflect.reference.*;
 
 import java.util.List;
 
@@ -353,6 +350,24 @@ public class ClassShovel {
             CtConstructorCall ctConstructorCall = (CtConstructorCall)ctElement;
             System.out.println(ctConstructorCall.getShortRepresentation());
         }
+        if (ctElement instanceof CtBlock) {
+            codeWriter.println("{");
+            codeWriter.indent();
+            addBlock((CtBlock)ctElement);
+            codeWriter.outdent();
+            codeWriter.println("}");
+        }
+        if (ctElement instanceof CtIf) {
+            CtIf ctIf = (CtIf)ctElement;
+            codeWriter.print("if (");
+            codeWriter.print(ctIf.getCondition());
+            codeWriter.print(")");
+        }
+//        if (ctElement instanceof CtExecutableReference) {
+//            CtExecutableReference ctExecutableReference = (CtExecutableReference)ctElement;
+//            codeWriter.print(ctExecutableReference.getSimpleName());
+//            codeWriter.print("()");
+//        }
     }
 
     private void addVisibility(ModifierKind modifierKind) {

@@ -38,13 +38,23 @@ public class SourceShovel {
             classShovelList.add(classShovel);
         }
 
+        String projectHeader = projectName.toUpperCase() + "_H";
+        headerWriter.print("#ifndef ");
+        headerWriter.println(projectHeader);
+        headerWriter.print("#define ");
+        headerWriter.println(projectHeader);
+        headerWriter.println();
+
         orderDependencies();
         addForwardDepenedencies();
+
         headerWriter.println();
 
         for (ClassShovel classShovel : classShovelList) {
             classShovel.process();
         }
+
+        headerWriter.println("#endif");
     }
 
     private void addForwardDepenedencies() {

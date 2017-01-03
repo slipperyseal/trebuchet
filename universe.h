@@ -1,4 +1,7 @@
 
+#ifndef UNIVERSE_H
+#define UNIVERSE_H
+
 class Scanner;
 class Device;
 class LongRangeScanner;
@@ -75,3 +78,4 @@ protected:
     void finalize();
 };
 
+#endif
