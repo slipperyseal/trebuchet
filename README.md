@@ -19,46 +19,41 @@ The aim of the project is not to replace a Java Virtual Machine and this project
 features necessary to do that for arbitrary programs.
 
 C++ was chosen as the target language as Java and C++ have enough in common for a reasonably logical translation.
-The output C++ isn't meant to be read and maintained in it's own right but we'll certainly try to make it as well formed as we can.
 
-### Current status
+Language transcoders often include a support library to implement language features, garbage collection etc.
+Our approach is to have supply the leanest possible support code but then allow optional extensions for mode advanced features.
+This should assist when integrating generated code into various platforms. You may wish to integrate with your own platform's
+memory managment.
 
-The project is quite young but is currently generating class headers and simple arithmetic, assignment and return values, for our specific test case.
-See the code before for what it can currently do.
+### Development Roadmap
+
+![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Implemented features. ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) High Priority features. ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Low priority features.
+
+- ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) `Bean` Parameter Assignment, Return Values, Constructors
+- ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Simple Arithmetic (some working cases)
+- ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Interfaces, Abstract methods
+- ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Static Initializers, Class Field Initializers
+- ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Incrementing heap allocator with no garbage collection
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) `instanceof` operator
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Common java.lang.Object and java.lang.Class methods
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Exceptions
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Generics handling (not templates)
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Synchronization, Volatile references, Threads
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Alternate Memory Managment
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Custom Collections Implementations
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Relection, Bytecode Class Loading
 
 ### Optimisations
 
-Modern C++ compilers can produce some amazing optimizations. So we will rely on these tools to do most of the heavy lifting.
+Modern C++ compilers can produce some amazing optimizations. We will rely on this to do most of the heavy lifting.
 Yet there are some quick wins we can apply in the translation process to help the C++ compiler to optimize optimally.
-
 Examples..
 
-* As all Java methods are virtual, demoting virtual methods to non-virtual where no type-cast can occur.
-* Demote heap allocated objects to local scope where reference doesn't escape scope.
-* Convert regular getters and setters to direct field access.
-* Optionally disable index and type safety checks.
-
-### Development Schedule
-
-Not all of Java features suit transation to C++. This should give you an idea of priority for each feature.
-
-##### Mandatory
-* Assignment, Flow control
-* Incrementing heap allocator with no garbage collection
-
-##### High Priority
-* Exceptions
-* Generics need not be implemented as templates. Type erasure should be able to be converted to simple type casts.
-* Generational garbage collection (Manual GC runs at the end of a scope)
-
-##### Medium Priority
-* Synchronization, Volatile references, Threads
-* Native implemenations of file and socket IO. 
-* Alternate implemenations of common Java Collections classes which suit native code
-
-##### Low Priority (Maybe Never. Use a JVM)
-* Reflection
-* Bytecode class loading
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) As all Java methods are virtual, demoting virtual methods to non-virtual where no type-cast can occur.
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Demote heap allocated objects to local scope where reference doesn't escape scope.
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Convert regular getters and setters to direct field access.
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Disable index and type safety checks when logically safe to do so.
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Use of different memory pools or memory managment by type.
 
 ### Example Translation
 
