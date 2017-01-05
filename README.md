@@ -27,21 +27,21 @@ memory managment.
 
 ### Development Roadmap
 
-![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Implemented features. ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) High Priority features. ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Low priority features.
+![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Implemented features. ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) High Priority features. ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Low priority features.
 
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) `Bean` Parameter Assignment, Return Values, Constructors
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Simple Arithmetic (some working cases)
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Interfaces, Abstract methods
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Static Initializers, Class Field Initializers
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Incrementing heap allocator with no garbage collection
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) `instanceof` operator
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Common java.lang.Object and java.lang.Class methods
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Exceptions
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Generics handling (not templates)
-- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Synchronization, Volatile references, Threads
-- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Alternate Memory Managment
-- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Custom Collections Implementations
-- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Relection, Bytecode Class Loading
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) `instanceof` operator
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Common java.lang.Object and java.lang.Class methods
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Exceptions
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Generics handling (not templates)
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Synchronization, Volatile references, Threads
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Alternate Memory Managment
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Custom Collections Implementations
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Relection, Bytecode Class Loading
 
 ### Optimisations
 
@@ -49,11 +49,11 @@ Modern C++ compilers can produce some amazing optimizations. We will rely on thi
 Yet there are some quick wins we can apply in the translation process to help the C++ compiler to optimize optimally.
 Examples..
 
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) As all Java methods are virtual, demoting virtual methods to non-virtual where no type-cast can occur.
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Demote heap allocated objects to local scope where reference doesn't escape scope.
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Convert regular getters and setters to direct field access.
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Disable index and type safety checks when logically safe to do so.
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Use of different memory pools or memory managment by type.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) As all Java methods are virtual, demoting virtual methods to non-virtual where no type-cast can occur.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Demote heap allocated objects to local scope where reference doesn't escape scope.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Convert regular getters and setters to direct field access.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Disable index and type safety checks when logically safe to do so.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Use of different memory pools or memory managment by type.
 
 ### Example Translation
 
