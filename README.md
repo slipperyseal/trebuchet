@@ -23,7 +23,7 @@ C++ was chosen as the target language as Java and C++ have enough in common for 
 Language transcoders often include a support library to implement language features, garbage collection etc.
 Our approach is to have supply the leanest possible support code but then allow optional extensions for mode advanced features.
 This should assist when integrating generated code into various platforms. You may wish to integrate with your own platform's
-memory managment.
+memory management.
 
 ### Development Roadmap
 
@@ -57,7 +57,13 @@ Examples..
 
 ### Example Translation
 
-This demonstrates the output C++ headers and code from the classes of our test case.
+Trebuchet will scan a source directory for Java source files, generating single CPP and Header files.
+Class re-ordering needs to occur to support C++'s forward declaration requirements for inheritated classes.
+The example source generates `universe.cpp` and `universe.h`.
+These can then be compiled with `trebuchet.cpp` which replaces the new operator and will provide support functions.
+
+The following test case demonstrates a simple code structure featuring interfaces, abstract methods,
+`Bean` assignment and return values etc...
 
 #### Java input
 
