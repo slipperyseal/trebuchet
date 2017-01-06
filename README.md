@@ -27,7 +27,7 @@ memory management.
 
 ### Development Roadmap
 
-![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Implemented features. ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) High Priority features. ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Low priority features.
+![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Implemented features. ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) High Priority features. ![#c5f015](http://placehold.it/15/c5f015/000000?text=+) Lower priority features. ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Maybe never. Use a JVM?
 
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) `Bean` Parameter Assignment, Return Values, Constructors
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Simple Arithmetic (some working cases)
@@ -38,10 +38,10 @@ memory management.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Common java.lang.Object and java.lang.Class methods
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Exceptions
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Generics handling (not templates)
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Synchronization, Volatile references, Threads
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Alternate Memory Managment
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Custom Collections Implementations
-- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Relection, Bytecode Class Loading
+- ![#c5f015](http://placehold.it/15/c5f015/000000?text=+) Synchronization, Volatile references, Threads
+- ![#c5f015](http://placehold.it/15/c5f015/000000?text=+) Alternate Memory Managment
+- ![#c5f015](http://placehold.it/15/c5f015/000000?text=+) Custom Collections Implementations
+- ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Reflection, Bytecode Class Loading
 
 ### Optimisations
 
