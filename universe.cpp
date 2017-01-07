@@ -1,6 +1,20 @@
-#include <stdio.h>
 
 #include "universe.h"
+
+Class classScanner = Class("Scanner");
+Class * superScanner[] = {};
+Class classDevice = Class("Device");
+Class * superDevice[] = {};
+Class classLongRangeScanner = Class("LongRangeScanner");
+Class * superLongRangeScanner[] = {&classScanner,&classDevice};
+Class classSpaceship = Class("Spaceship");
+Class * superSpaceship[] = {};
+Class classUniverse = Class("Universe");
+Class * superUniverse[] = {};
+Class classObject = Class("Object");
+Class * superObject[] = {};
+Class classClass = Class("Class");
+Class * superClass[] = {};
 
 /*** trebuchet.equipment.Scanner ***/
 void Scanner::scan() {
@@ -26,8 +40,8 @@ void LongRangeScanner::setRange(int range) {
 }
 
 void LongRangeScanner::scan() {
-    this->range = this->range + 2;
-    this->range = this->range - 1;
+    this->range = this->range + 234;
+    this->range = this->range - 123;
 }
 
 int LongRangeScanner::getDeviceId() {
@@ -57,9 +71,8 @@ void Spaceship::reset(LongRangeScanner * longRangeScanner, int serialNumber) {
 Universe::Universe() {
 }
 
-void Universe::main(char ** * args) {
-    Spaceship * spaceship = new Spaceship(new LongRangeScanner());
-    printf("getDeviceId %d\n", spaceship->getLongRangeScanner()->getDeviceId());
+void Universe::main(char * args) {
+    ;
 }
 
 int main(int argc, char* argv[]) {
@@ -107,5 +120,14 @@ void Object::wait() {
 }
 
 void Object::finalize() {
+}
+
+/*** Class ***/
+Class::Class(const char * name) {
+    this->name = name;
+}
+
+bool Class::isAssignableFrom(Class * type) {
+    return false;
 }
 

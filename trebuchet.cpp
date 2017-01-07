@@ -33,3 +33,35 @@ void* Stack::push(int size) {
     printf("push %d %d\n", size, offset);
     return &data[offset];
 }
+
+// java arrays are allocated as the length of the array followed by the data but are returned as a pointer to the start of the data
+// [int:len][...data...]
+//          ^ returned pointer
+
+void* newObjectArray(int len) {
+    int * array = (int *)new char[ (len*sizeof(void*))+sizeof(int) ];
+    array[0] = len;
+    return (void*)&array[1];
+}
+
+int* newIntArray(int len) {
+    int * array = (int *)new char[ (len*sizeof(int))+sizeof(int) ];
+    array[0] = len;
+    return (int*)&array[1];
+}
+
+short* newCharArray(int len) {
+    int * array = (int *)new char[ (len*sizeof(short))+sizeof(int) ];
+    array[0] = len;
+    return (short*)&array[1];
+}
+
+char* newByteArray(int len) {
+    int * array = (int *)new char[ (len*sizeof(char))+sizeof(int) ];
+    array[0] = len;
+    return (char*)&array[1];
+}
+
+int getArrayLen(void * array) {
+    return ((int*)array)[-1];
+}

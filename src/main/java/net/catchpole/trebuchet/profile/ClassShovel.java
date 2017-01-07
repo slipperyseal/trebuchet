@@ -182,6 +182,9 @@ public class ClassShovel {
         for (CtStatement ctStatement : ctBlock.getStatements()) {
             System.out.println("STATEMENT: " + ctStatement);
             if (ctStatement.toString().equals("super()")) {
+                for (CtElement ctElement : ctStatement.getElements(new MatchAllFilter<CtElement>())) {
+                    System.out.println("  ELEMENT! " + ctElement.getClass().getSimpleName() + " " + ctElement);
+                }
                 continue;
             }
             for (CtElement ctElement : ctStatement.getElements(new MatchAllFilter<CtElement>())) {
@@ -345,6 +348,11 @@ public class ClassShovel {
             CtBinaryOperator ctBinaryOperator = (CtBinaryOperator)ctElement;
             String value = binaryOperatorMapping.getMapping(ctBinaryOperator.getKind());
             deferred = " " + value + " ";
+        }
+        if (ctElement instanceof CtOperatorAssignment) {
+            CtOperatorAssignment ctOperatorAssignment = (CtOperatorAssignment)ctElement;
+            String value = binaryOperatorMapping.getMapping(ctOperatorAssignment.getKind());
+            codeWriter.print(" " + value + "= ");
         }
         if (ctElement instanceof CtConstructorCall) {
             CtConstructorCall ctConstructorCall = (CtConstructorCall)ctElement;

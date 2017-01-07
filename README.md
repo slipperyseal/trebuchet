@@ -27,7 +27,7 @@ memory management.
 
 ### Development Roadmap
 
-![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Implemented features. ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) High Priority features. ![#c5f015](http://placehold.it/15/c5f015/000000?text=+) Lower priority features. ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Maybe never. Use a JVM?
+![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Implemented features. ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) High Priority features. ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) Lower priority features. ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Maybe never. Use a JVM?
 
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) `Bean` Parameter Assignment, Return Values, Constructors
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Simple Arithmetic (some working cases)
@@ -38,19 +38,20 @@ memory management.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Common java.lang.Object and java.lang.Class methods
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Exceptions
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Generics handling (not templates)
-- ![#c5f015](http://placehold.it/15/c5f015/000000?text=+) Synchronization, Volatile references, Threads
-- ![#c5f015](http://placehold.it/15/c5f015/000000?text=+) Alternate Memory Managment
-- ![#c5f015](http://placehold.it/15/c5f015/000000?text=+) Custom Collections Implementations
+- ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) Synchronization, Volatile references, Threads
+- ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) Alternate Memory Management
+- ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) Custom Collections Implementations
 - ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Reflection, Bytecode Class Loading
 - ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Extensive API support (AWT etc.)
 
 ### Optimisations
 
-Modern C++ compilers can produce some amazing optimizations. We will rely on this to do most of the heavy lifting.
-Yet there are some quick wins we can apply in the translation process to help the C++ compiler to optimize optimally.
-Examples..
+Modern C++ compilers can produce some amazing optimisations. We will rely on this to do most of the heavy lifting.
+Yet there are some quick wins we can apply in the translation process. Examples..
 
-- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) As all Java methods are virtual, demoting virtual methods to non-virtual where no type-cast can occur.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) As all Java methods are virtual, demoting virtual methods to non-virtual where no inheritance or cast occurs.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Do not generate java.lang.Class definitions where the class's definition is never referenced.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Do not extend java.lang.Object (which introduces the overhead of a vtable to all object instances) where never referenced.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Demote heap allocated objects to local scope where reference doesn't escape scope.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Convert regular getters and setters to direct field access.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Disable index and type safety checks when logically safe to do so.

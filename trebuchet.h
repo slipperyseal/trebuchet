@@ -16,4 +16,9 @@ private:
 
 void * operator new(size_t size, Stack * stack) throw(std::bad_alloc);
 
+int* newIntArray(int len);
+short* newCharArray(int len);
+char* newByteArray(int len);
+int getArrayLen(void * array);
+
 #endif

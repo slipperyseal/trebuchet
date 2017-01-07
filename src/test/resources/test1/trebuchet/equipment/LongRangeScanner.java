@@ -12,8 +12,8 @@ public class LongRangeScanner extends Device implements Scanner {
     }
 
     public void scan() {
-        range = range + 2;
-        range = range - 1;
+        range = range + 234;
+        range = range - 123;
     }
 
     public int getDeviceId() {

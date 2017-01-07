@@ -8,6 +8,7 @@ class LongRangeScanner;
 class Spaceship;
 class Universe;
 class Object;
+class Class;
 
 /*** trebuchet.equipment.Scanner ***/
 class Scanner {
@@ -55,7 +56,7 @@ public:
 class Universe {
 public:
     Universe();
-    static void main(char ** * args);
+    static void main(char * args);
 };
 
 /*** java.lang.Object ***/
@@ -76,6 +77,16 @@ public:
     void wait();
 protected:
     void finalize();
+};
+
+/*** Class ***/
+class Class {
+private:
+    const char * name;
+
+public:
+    Class(const char * name);
+    bool isAssignableFrom(Class * type);
 };
 
 #endif

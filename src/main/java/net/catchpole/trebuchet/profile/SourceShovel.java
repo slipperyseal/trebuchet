@@ -1,6 +1,7 @@
 package net.catchpole.trebuchet.profile;
 
 import net.catchpole.trebuchet.code.CodeWriter;
+import net.catchpole.trebuchet.code.FirstPrintOptions;
 import spoon.reflect.declaration.CtType;
 
 import java.util.ArrayList;
@@ -63,6 +64,29 @@ public class SourceShovel {
             headerWriter.print(classShovel.getName());
             headerWriter.println(";");
         }
+
+        for (ClassShovel classShovel : classShovelList) {
+            codeWriter.print("Class class");
+            codeWriter.print(classShovel.getName());
+            codeWriter.print(" = Class(\"");
+            codeWriter.print(classShovel.getName());
+            codeWriter.println("\");");
+
+            codeWriter.print("Class * super");
+            codeWriter.print(classShovel.getName());
+            codeWriter.print("[] = {");
+            FirstPrintOptions firstPrintOptions = new FirstPrintOptions(codeWriter, null, ",");
+            for (ClassShovel testShovel : classShovelList) {
+                if (classShovel.inheritsFrom(testShovel.getCtType())) {
+                    firstPrintOptions.print();
+                    codeWriter.print("&class");
+                    codeWriter.print(testShovel.getName());
+                }
+            }
+            codeWriter.println("};");
+        }
+        codeWriter.println();
+
     }
 
     private void orderDependencies() {

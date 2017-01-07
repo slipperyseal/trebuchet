@@ -10,7 +10,7 @@ public class TypeMapper {
 
     public TypeMapper() {
         typeMappings.put("java.lang.String", "const char");
-        typeMappings.put("java.lang.reflect.Array", "char **");
+        typeMappings.put("java.lang.reflect.Array", "char");
         typeMappings.put("boolean", "bool");
         typeMappings.put("long", "long long");
     }
