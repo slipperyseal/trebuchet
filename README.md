@@ -27,6 +27,8 @@ memory management.
 
 ### Development Roadmap
 
+Trebuchet uses the Spoon Java source code parser <https://github.com/INRIA/spoon>.
+
 ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Implemented features. ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) High Priority features. ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) Lower priority features. ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Maybe never. Use a JVM?
 
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) `Bean` Parameter Assignment, Return Values, Constructors
@@ -34,6 +36,7 @@ memory management.
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Interfaces, Abstract methods
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Static Initializers, Class Field Initializers
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Incrementing heap allocator with no garbage collection
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) The remaining flow control, assignment and math which is not yet implemented.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Non-C++ operators. eg. `instanceof`
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Common java.lang.Object and java.lang.Class methods
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Exceptions
