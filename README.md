@@ -72,6 +72,7 @@ The following test case demonstrates a simple code structure featuring interface
 
 #### Java input
 
+``` java
         public class Spaceship {
         	public static final int FIRSTSHIP = 100;
         	private String name = "Nostromo";
@@ -146,9 +147,11 @@ The following test case demonstrates a simple code structure featuring interface
         public interface Scanner {
             void scan();
         }
+```
 
 #### C++ header output
 
+``` c++
         /*** trebuchet.equipment.Scanner ***/
         class Scanner {
         public:
@@ -218,9 +221,11 @@ The following test case demonstrates a simple code structure featuring interface
             Universe();
             static void main(char * args);
         };
+```
 
 #### C++ code output
 
+``` c++
         /*** trebuchet.equipment.Scanner ***/
         void Scanner::scan() {
         }
@@ -302,3 +307,4 @@ The following test case demonstrates a simple code structure featuring interface
             Universe::main(0);
             return 0;
         }
+```

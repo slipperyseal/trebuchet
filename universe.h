@@ -14,6 +14,7 @@ class Class;
 class Scanner {
 public:
     virtual void scan() = 0;
+
 };
 
 /*** trebuchet.equipment.Device ***/
@@ -22,6 +23,7 @@ public:
     Device();
     void explode();
     virtual int getDeviceId() = 0;
+
 };
 
 /*** trebuchet.equipment.LongRangeScanner ***/
@@ -35,6 +37,8 @@ public:
     void setRange(int range);
     void scan();
     int getDeviceId();
+
+private:
     /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
     class MyInnerScanner {
     private:
@@ -43,6 +47,7 @@ public:
     public:
         MyInnerScanner();
         void scanAhoy();
+    
     };
     
     /*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
@@ -53,6 +58,7 @@ public:
     public:
         YourInnerScanner();
         void scanAhoy();
+    
     };
     
 };
@@ -70,6 +76,7 @@ public:
     Spaceship(LongRangeScanner * longRangeScanner);
     LongRangeScanner * getLongRangeScanner();
     void reset(LongRangeScanner * longRangeScanner, int serialNumber);
+
 };
 
 /*** trebuchet.Universe ***/
@@ -77,6 +84,7 @@ class Universe {
 public:
     Universe();
     static void main(char * args);
+
 };
 
 /*** java.lang.Object ***/
@@ -97,6 +105,7 @@ public:
     void wait();
 protected:
     void finalize();
+
 };
 
 /*** Class ***/
@@ -107,6 +116,7 @@ private:
 public:
     Class(const char * name);
     bool isAssignableFrom(Class * type);
+
 };
 
 #endif

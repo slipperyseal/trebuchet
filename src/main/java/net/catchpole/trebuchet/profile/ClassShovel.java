@@ -95,12 +95,12 @@ public class ClassShovel {
             }
         }
 
+        headerWriter.println();
         for (CtType innerClass : (Set<CtType>)ctType.getNestedTypes()) {
+            addVisibility(ModifierKind.PRIVATE);
             headerWriter.indent();
-
             ClassShovel innerShovel = new ClassShovel(innerClass, headerWriter, codeWriter, typeMapper);
             innerShovel.addClass();
-
             headerWriter.outdent();
         }
 
