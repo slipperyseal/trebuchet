@@ -3,20 +3,14 @@ package net.catchpole.trebuchet.profile;
 import net.catchpole.trebuchet.code.ChangeTracker;
 import net.catchpole.trebuchet.code.CodeWriter;
 import net.catchpole.trebuchet.code.FirstPrintOptions;
-import net.catchpole.trebuchet.spoon.MatchAllFilter;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
-import spoon.reflect.reference.CtFieldReference;
-import spoon.reflect.reference.CtPackageReference;
-import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 
 import java.util.List;
 import java.util.Set;
 
 public class ClassShovel {
-    private static BinaryOperatorMapping binaryOperatorMapping = new BinaryOperatorMapping();
-
     private CtType ctType;
     private CodeWriter codeWriter;
     private CodeWriter headerWriter;
@@ -190,27 +184,6 @@ public class ClassShovel {
         codeWriter.println();
     }
 
-    private void addBlock(CtBlock ctBlock) {
-        if (ctBlock == null) {
-            return;
-        }
-        //System.out.println("BLOCK: " + ctBlock.getParent().toString());
-        for (CtStatement ctStatement : ctBlock.getStatements()) {
-            //System.out.println("STATEMENT: " + ctStatement);
-            if (ctStatement.toString().equals("super()")) {
-                for (CtElement ctElement : ctStatement.getElements(new MatchAllFilter<CtElement>())) {
-                    //System.out.println("  ELEMENT! " + ctElement.getClass().getSimpleName() + " " + ctElement);
-                }
-                continue;
-            }
-            for (CtElement ctElement : ctStatement.getElements(new MatchAllFilter<CtElement>())) {
-                //System.out.println("  ELEMENT: " + ctElement.getClass().getSimpleName() + " " + ctElement);
-                addElement(ctElement);
-            }
-            codeWriter.println(";");
-        }
-    }
-
     private void addClassSignature(CtType ctType) {
         headerWriter.print("class ");
         headerWriter.print(name);
@@ -311,86 +284,9 @@ public class ClassShovel {
         codeWriter.print(")");
     }
 
-    private String deferred;
-
-    private boolean doDeferred() {
-        if (deferred != null) {
-            codeWriter.print(deferred);
-            deferred = null;
-            return true;
-        }
-        return false;
-    }
-
-    private void addElement(CtElement ctElement) {
-        if (ctElement instanceof CtReturn) {
-            codeWriter.print("return ");
-        }
-        if (ctElement instanceof CtLiteral) {
-            CtLiteral ctLiteral = (CtLiteral)ctElement;
-            Object value = ctLiteral.getValue();
-            if (value == null) {
-                value = "0";
-            }
-            codeWriter.print(value);
-        }
-        if (ctElement instanceof CtFieldReference) {
-            CtFieldReference ctFieldReference = (CtFieldReference)ctElement;
-            codeWriter.print(ctFieldReference.getSimpleName());
-            doDeferred();
-        }
-        if (ctElement instanceof CtFieldWrite) {
-            CtFieldWrite ctFieldWrite = (CtFieldWrite)ctElement;
-            deferred = " = ";
-        }
-        if (ctElement instanceof CtThisAccess) {
-            CtThisAccess ctThisAccess = (CtThisAccess)ctElement;
-            codeWriter.print("this->");
-        }
-        if (ctElement instanceof CtTypeReference) {
-            CtTypeReference ctTypeReference = (CtTypeReference)ctElement;
-        }
-        if (ctElement instanceof CtPackageReference) {
-            CtPackageReference ctPackageReference = (CtPackageReference)ctElement;
-        }
-        if (ctElement instanceof CtTypeAccess) {
-            CtTypeAccess ctTypeAccess = (CtTypeAccess)ctElement;
-        }
-        if (ctElement instanceof CtParameterReference) {
-            CtParameterReference ctParameterReference = (CtParameterReference)ctElement;
-            codeWriter.print(ctParameterReference.getSimpleName());
-        }
-        if (ctElement instanceof CtBinaryOperator) {
-            CtBinaryOperator ctBinaryOperator = (CtBinaryOperator)ctElement;
-            String value = binaryOperatorMapping.getMapping(ctBinaryOperator.getKind());
-            deferred = " " + value + " ";
-        }
-        if (ctElement instanceof CtOperatorAssignment) {
-            CtOperatorAssignment ctOperatorAssignment = (CtOperatorAssignment)ctElement;
-            String value = binaryOperatorMapping.getMapping(ctOperatorAssignment.getKind());
-            codeWriter.print(" " + value + "= ");
-        }
-        if (ctElement instanceof CtConstructorCall) {
-            CtConstructorCall ctConstructorCall = (CtConstructorCall)ctElement;
-        }
-        if (ctElement instanceof CtBlock) {
-            codeWriter.println("{");
-            codeWriter.indent();
-            addBlock((CtBlock)ctElement);
-            codeWriter.outdent();
-            codeWriter.println("}");
-        }
-        if (ctElement instanceof CtIf) {
-            CtIf ctIf = (CtIf)ctElement;
-            codeWriter.print("if (");
-            codeWriter.print(ctIf.getCondition());
-            codeWriter.print(")");
-        }
-//        if (ctElement instanceof CtExecutableReference) {
-//            CtExecutableReference ctExecutableReference = (CtExecutableReference)ctElement;
-//            codeWriter.print(ctExecutableReference.getSimpleName());
-//            codeWriter.print("()");
-//        }
+    public void addBlock(CtBlock ctBlock) {
+        BlockShovel blockShovel = new BlockShovel(codeWriter, typeMapper);
+        blockShovel.addBlock(ctBlock);
     }
 
     private void addVisibility(ModifierKind modifierKind) {
