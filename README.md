@@ -73,238 +73,242 @@ The following test case demonstrates a simple code structure featuring interface
 #### Java input
 
 ``` java
-        public class Spaceship {
-        	public static final int FIRSTSHIP = 100;
-        	private String name = "Nostromo";
-        	private int serialNumber = 120;
-        	private LongRangeScanner longRangeScanner;
+public class Spaceship {
+    public static final int FIRSTSHIP = 100;
+    private String name = "Nostromo";
+    private int serialNumber = 120;
+    private LongRangeScanner longRangeScanner;
 
-        	public Spaceship(LongRangeScanner longRangeScanner) {
-        		this.longRangeScanner = longRangeScanner;
-        	}
+    public Spaceship(LongRangeScanner longRangeScanner) {
+        this.longRangeScanner = longRangeScanner;
+    }
 
-        	public LongRangeScanner getLongRangeScanner() {
-        		return longRangeScanner;
-        	}
+    public LongRangeScanner getLongRangeScanner() {
+        return longRangeScanner;
+    }
 
-        	public void reset(LongRangeScanner longRangeScanner, int serialNumber) {
-        		this.longRangeScanner = longRangeScanner;
-        		this.serialNumber = serialNumber;
-        	}
+    public void reset(LongRangeScanner longRangeScanner, int serialNumber) {
+        this.longRangeScanner = longRangeScanner;
+        this.serialNumber = serialNumber;
+    }
+}
+
+public abstract class Device {
+    public void explode() {
+    }
+
+    public abstract int getDeviceId();
+}
+
+public class LongRangeScanner extends Device implements Scanner {
+    private int range;
+
+    public int getRange() {
+        return this.range;
+    }
+
+    public void setRange(int range) {
+        this.range = range;
+    }
+
+    public void scan() {
+        range = range + 234;
+        range = range - 123;
+    }
+
+    public int getDeviceId() {
+        return 1337;
+    }
+
+    private class YourInnerScanner {
+        private long someNumber;
+
+        public YourInnerScanner() {
+            this.someNumber = 10;
+        }
+        public void scanAhoy() {
+            someNumber = someNumber + 2;
+        }
+    }
+
+    private class MyInnerScanner {
+        private long anotherNumber;
+
+        MyInnerScanner() {
+            this.anotherNumber = 20;
         }
 
-        public abstract class Device {
-            public void explode() {
-            }
-
-            public abstract int getDeviceId();
+        public void scanAhoy() {
+            this.anotherNumber = this.anotherNumber + 4;
         }
+    }
+}
 
-        public class LongRangeScanner extends Device implements Scanner {
-            private int range;
-
-            public int getRange() {
-                return this.range;
-            }
-
-            public void setRange(int range) {
-                this.range = range;
-            }
-
-            public void scan() {
-                range = range + 234;
-                range = range - 123;
-            }
-
-            public int getDeviceId() {
-                return 1337;
-            }
-
-            private class YourInnerScanner {
-                private long someNumber;
-
-                public YourInnerScanner() {
-                    this.someNumber = 10;
-                }
-                public void scanAhoy() {
-                    someNumber = someNumber + 2;
-                }
-            }
-
-            private class MyInnerScanner {
-                private long anotherNumber;
-
-                MyInnerScanner() {
-                    this.anotherNumber = 20;
-                }
-
-                public void scanAhoy() {
-                    this.anotherNumber = this.anotherNumber + 4;
-                }
-            }
-        }
-
-        public interface Scanner {
-            void scan();
-        }
+public interface Scanner {
+    void scan();
+}
 ```
 
 #### C++ header output
 
 ``` c++
-        /*** trebuchet.equipment.Scanner ***/
-        class Scanner {
-        public:
-            virtual void scan() = 0;
-        };
 
-        /*** trebuchet.equipment.Device ***/
-        class Device {
-        public:
-            Device();
-            void explode();
-            virtual int getDeviceId() = 0;
-        };
+/*** trebuchet.equipment.Scanner ***/
+class Scanner {
+public:
+    virtual void scan() = 0;
+};
 
-        /*** trebuchet.equipment.LongRangeScanner ***/
-        class LongRangeScanner: public Device, public Scanner {
-        private:
-            int range;
+/*** trebuchet.equipment.Device ***/
+class Device {
+public:
+    Device();
+    void explode();
+    virtual int getDeviceId() = 0;
+};
 
-        public:
-            LongRangeScanner();
-            int getRange();
-            void setRange(int range);
-            void scan();
-            int getDeviceId();
+/*** trebuchet.equipment.LongRangeScanner ***/
+class LongRangeScanner: public Device, public Scanner {
+private:
+    int range;
 
-            /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
-            class MyInnerScanner {
-            private:
-                long long anotherNumber;
+public:
+    LongRangeScanner();
+    int getRange();
+    void setRange(int range);
+    void scan();
+    int getDeviceId();
 
-            public:
-                MyInnerScanner();
-                void scanAhoy();
-            };
+    /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
+    class MyInnerScanner {
+    private:
+        long long anotherNumber;
 
-            /*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
-            class YourInnerScanner {
-            private:
-                long long someNumber;
+    public:
+        MyInnerScanner();
+        void scanAhoy();
+    };
 
-            public:
-                YourInnerScanner();
-                void scanAhoy();
-            };
+    /*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
+    class YourInnerScanner {
+    private:
+        long long someNumber;
 
-        };
+    public:
+        YourInnerScanner();
+        void scanAhoy();
+    };
 
-        /*** trebuchet.craft.Spaceship ***/
-        class Spaceship {
-        public:
-            static int FIRSTSHIP;
-        private:
-            const char * name;
-            int serialNumber;
-            LongRangeScanner * longRangeScanner;
+};
 
-        public:
-            Spaceship(LongRangeScanner * longRangeScanner);
-            LongRangeScanner * getLongRangeScanner();
-            void reset(LongRangeScanner * longRangeScanner, int serialNumber);
-        };
+/*** trebuchet.craft.Spaceship ***/
+class Spaceship {
+public:
+    static int FIRSTSHIP;
+private:
+    const char * name;
+    int serialNumber;
+    LongRangeScanner * longRangeScanner;
 
-        /*** trebuchet.Universe ***/
-        class Universe {
-        public:
-            Universe();
-            static void main(char * args);
-        };
+public:
+    Spaceship(LongRangeScanner * longRangeScanner);
+    LongRangeScanner * getLongRangeScanner();
+    void reset(LongRangeScanner * longRangeScanner, int serialNumber);
+};
+
+/*** trebuchet.Universe ***/
+class Universe {
+public:
+    Universe();
+    static void main(char * args);
+};
+
 ```
 
 #### C++ code output
 
 ``` c++
-        /*** trebuchet.equipment.Scanner ***/
-        void Scanner::scan() {
-        }
 
-        /*** trebuchet.equipment.Device ***/
-        Device::Device() {
-        }
+/*** trebuchet.equipment.Scanner ***/
+void Scanner::scan() {
+}
 
-        void Device::explode() {
-        }
+/*** trebuchet.equipment.Device ***/
+Device::Device() {
+}
 
-        /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
-        LongRangeScanner::MyInnerScanner::MyInnerScanner() {
-            this->anotherNumber = 20;
-        }
+void Device::explode() {
+}
 
-        void LongRangeScanner::MyInnerScanner::scanAhoy() {
-            this->anotherNumber = this->anotherNumber + 4;
-        }
+/*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
+LongRangeScanner::MyInnerScanner::MyInnerScanner() {
+    this->anotherNumber = 20;
+}
 
-        /*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
-        LongRangeScanner::YourInnerScanner::YourInnerScanner() {
-            this->someNumber = 10;
-        }
+void LongRangeScanner::MyInnerScanner::scanAhoy() {
+    this->anotherNumber = this->anotherNumber + 4;
+}
 
-        void LongRangeScanner::YourInnerScanner::scanAhoy() {
-            this->someNumber = this->someNumber + 2;
-        }
+/*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
+LongRangeScanner::YourInnerScanner::YourInnerScanner() {
+    this->someNumber = 10;
+}
 
-        /*** trebuchet.equipment.LongRangeScanner ***/
-        LongRangeScanner::LongRangeScanner() {
-        }
+void LongRangeScanner::YourInnerScanner::scanAhoy() {
+    this->someNumber = this->someNumber + 2;
+}
 
-        int LongRangeScanner::getRange() {
-            return this->range;
-        }
+/*** trebuchet.equipment.LongRangeScanner ***/
+LongRangeScanner::LongRangeScanner() {
+}
 
-        void LongRangeScanner::setRange(int range) {
-            this->range = range;
-        }
+int LongRangeScanner::getRange() {
+    return this->range;
+}
 
-        void LongRangeScanner::scan() {
-            this->range = this->range + 234;
-            this->range = this->range - 123;
-        }
+void LongRangeScanner::setRange(int range) {
+    this->range = range;
+}
 
-        int LongRangeScanner::getDeviceId() {
-            return 1337;
-        }
+void LongRangeScanner::scan() {
+    this->range = this->range + 234;
+    this->range = this->range - 123;
+}
 
-        /*** trebuchet.craft.Spaceship ***/
-        int Spaceship::FIRSTSHIP = 100;
+int LongRangeScanner::getDeviceId() {
+    return 1337;
+}
 
-        Spaceship::Spaceship(LongRangeScanner * longRangeScanner) {
-            this->name = "Nostromo";
-            this->serialNumber = 120;
+/*** trebuchet.craft.Spaceship ***/
+int Spaceship::FIRSTSHIP = 100;
 
-            this->longRangeScanner = longRangeScanner;
-        }
+Spaceship::Spaceship(LongRangeScanner * longRangeScanner) {
+    this->name = "Nostromo";
+    this->serialNumber = 120;
 
-        LongRangeScanner * Spaceship::getLongRangeScanner() {
-            return this->longRangeScanner;
-        }
+    this->longRangeScanner = longRangeScanner;
+}
 
-        void Spaceship::reset(LongRangeScanner * longRangeScanner, int serialNumber) {
-            this->longRangeScanner = longRangeScanner;
-            this->serialNumber = serialNumber;
-        }
+LongRangeScanner * Spaceship::getLongRangeScanner() {
+    return this->longRangeScanner;
+}
 
-        /*** trebuchet.Universe ***/
-        Universe::Universe() {
-        }
+void Spaceship::reset(LongRangeScanner * longRangeScanner, int serialNumber) {
+    this->longRangeScanner = longRangeScanner;
+    this->serialNumber = serialNumber;
+}
 
-        void Universe::main(char * args) {
-            ;
-        }
+/*** trebuchet.Universe ***/
+Universe::Universe() {
+}
 
-        int main(int argc, char* argv[]) {
-            Universe::main(0);
-            return 0;
-        }
+void Universe::main(char * args) {
+    ;
+}
+
+int main(int argc, char* argv[]) {
+    Universe::main(0);
+    return 0;
+}
+
 ```
