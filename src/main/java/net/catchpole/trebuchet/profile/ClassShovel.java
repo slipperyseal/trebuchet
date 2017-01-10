@@ -19,7 +19,6 @@ public class ClassShovel {
 
     private CtType ctType;
     private TypeMapper typeMapper;
-    private boolean isInterface;
     private ChangeTracker<ModifierKind> visibityChange = new ChangeTracker<ModifierKind>(ModifierKind.PUBLIC);
 
     private CodeWriter codeWriter;
@@ -31,8 +30,6 @@ public class ClassShovel {
         this.codeWriter = codeWriter;
         this.headerWriter = headerWriter;
         this.typeMapper = typeMapper;
-
-        this.isInterface = ctType instanceof CtInterface;
     }
 
     public CtType getCtType() {
@@ -62,10 +59,6 @@ public class ClassShovel {
     }
 
     public void addClass() {
-        addClass(this.ctType);
-    }
-
-    public void addClass(CtType ctType) {
         headerWriter.print("/*** ");
         headerWriter.print(ctType.getQualifiedName());
         headerWriter.println(" ***/");
@@ -85,7 +78,7 @@ public class ClassShovel {
 
         boolean containsMain = false;
         for (CtTypeMember ctTypeMember : (List<CtTypeMember>)ctType.getTypeMembers()) {
-            if (ctTypeMember instanceof CtConstructor && !isInterface) {
+            if (ctTypeMember instanceof CtConstructor && !(ctType instanceof CtInterface)) {
                 addConstuctorSignature((CtConstructor)ctTypeMember);
                 headerWriter.println(";");
                 headerWriter.outdent();
@@ -107,7 +100,10 @@ public class ClassShovel {
 
         for (CtType innerClass : (Set<CtType>)ctType.getNestedTypes()) {
             headerWriter.indent();
-            addClass(innerClass);
+
+            ClassShovel innerShovel = new ClassShovel(innerClass, headerWriter, codeWriter, typeMapper);
+            innerShovel.addClass();
+
             headerWriter.outdent();
         }
 
@@ -123,7 +119,7 @@ public class ClassShovel {
         }
 
         for (CtTypeMember ctTypeMember : (List<CtTypeMember>)ctType.getTypeMembers()) {
-            if (ctTypeMember instanceof CtConstructor && !isInterface) {
+            if (ctTypeMember instanceof CtConstructor && !(ctType instanceof CtInterface)) {
                 addConstructor((CtConstructor)ctTypeMember);
             }
             if (ctTypeMember instanceof CtMethod) {
@@ -151,7 +147,6 @@ public class ClassShovel {
     }
 
     private void addConstructor(CtConstructor ctConstructor) {
-        CtType ctType = ctConstructor.getDeclaringType();
         CtType outterType = ctType.getDeclaringType();
         if (outterType != null) {
             codeWriter.print(typeMapper.getTypeName(outterType));
@@ -178,7 +173,6 @@ public class ClassShovel {
         codeWriter.print(returnType);
         codeWriter.print(' ');
 
-        CtType ctType = ctMethod.getDeclaringType();
         CtType outterType = ctType.getDeclaringType();
         if (outterType != null) {
             codeWriter.print(typeMapper.getTypeName(outterType));
@@ -292,7 +286,7 @@ public class ClassShovel {
     private void addMethodSignature(CtMethod ctMethod) {
         addVisibility(ctMethod.getVisibility());
         headerWriter.indent();
-        boolean isVirtual = isInterface || ctMethod.getModifiers().contains(ModifierKind.ABSTRACT);
+        boolean isVirtual = ctType instanceof CtInterface || ctMethod.getModifiers().contains(ModifierKind.ABSTRACT);
         if (isVirtual) {
             headerWriter.print("virtual ");
         }
