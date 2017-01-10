@@ -6,16 +6,19 @@ import net.catchpole.trebuchet.code.FirstPrintOptions;
 import net.catchpole.trebuchet.spoon.MatchAllFilter;
 import spoon.reflect.code.*;
 import spoon.reflect.declaration.*;
-import spoon.reflect.reference.*;
+import spoon.reflect.reference.CtFieldReference;
+import spoon.reflect.reference.CtPackageReference;
+import spoon.reflect.reference.CtParameterReference;
+import spoon.reflect.reference.CtTypeReference;
 
 import java.util.List;
+import java.util.Set;
 
 public class ClassShovel {
     private static BinaryOperatorMapping binaryOperatorMapping = new BinaryOperatorMapping();
 
     private CtType ctType;
     private TypeMapper typeMapper;
-    private String name;
     private boolean isInterface;
     private ChangeTracker<ModifierKind> visibityChange = new ChangeTracker<ModifierKind>(ModifierKind.PUBLIC);
 
@@ -30,7 +33,6 @@ public class ClassShovel {
         this.typeMapper = typeMapper;
 
         this.isInterface = ctType instanceof CtInterface;
-        this.name = typeMapper.getTypeName(ctType);
     }
 
     public CtType getCtType() {
@@ -56,14 +58,14 @@ public class ClassShovel {
     }
 
     public String getName() {
-        return name;
+        return typeMapper.getTypeName(ctType);
     }
 
-    public void process() {
-        codeWriter.print("/*** ");
-        codeWriter.print(ctType.getQualifiedName());
-        codeWriter.println(" ***/");
+    public void addClass() {
+        addClass(this.ctType);
+    }
 
+    public void addClass(CtType ctType) {
         headerWriter.print("/*** ");
         headerWriter.print(ctType.getQualifiedName());
         headerWriter.println(" ***/");
@@ -94,7 +96,8 @@ public class ClassShovel {
                 headerWriter.outdent();
 
                 CtMethod ctMethod = (CtMethod)ctTypeMember;
-                if (ctMethod.getModifiers().contains(ModifierKind.STATIC) &&
+                if (ctType.getDeclaringType() == null &&
+                        ctMethod.getModifiers().contains(ModifierKind.STATIC) &&
                         ctMethod.getModifiers().contains(ModifierKind.PUBLIC) &&
                         ctMethod.getSimpleName().equals("main")) {
                     containsMain = true;
@@ -102,8 +105,18 @@ public class ClassShovel {
             }
         }
 
+        for (CtType innerClass : (Set<CtType>)ctType.getNestedTypes()) {
+            headerWriter.indent();
+            addClass(innerClass);
+            headerWriter.outdent();
+        }
+
         headerWriter.println("};");
         headerWriter.println();
+
+        codeWriter.print("/*** ");
+        codeWriter.print(ctType.getQualifiedName());
+        codeWriter.println(" ***/");
 
         if (!fieldGroups.getStaticInitializedFields().isEmpty()) {
             addStaticInitializers(fieldGroups);
@@ -129,7 +142,7 @@ public class ClassShovel {
     private void addMainMethod() {
         codeWriter.println("int main(int argc, char* argv[]) {");
         codeWriter.indent();
-        codeWriter.print(name);
+        codeWriter.print(typeMapper.getTypeName(ctType));
         codeWriter.println("::main(0);");
         codeWriter.println("return 0;");
         codeWriter.outdent();
@@ -138,10 +151,15 @@ public class ClassShovel {
     }
 
     private void addConstructor(CtConstructor ctConstructor) {
-        String name = typeMapper.getTypeName(ctType);
-        codeWriter.print(name);
+        CtType ctType = ctConstructor.getDeclaringType();
+        CtType outterType = ctType.getDeclaringType();
+        if (outterType != null) {
+            codeWriter.print(typeMapper.getTypeName(outterType));
+            codeWriter.print("::");
+        }
+        codeWriter.print(typeMapper.getTypeName(ctType));
         codeWriter.print("::");
-        codeWriter.print(name);
+        codeWriter.print(typeMapper.getTypeName(ctType));
         addParameters(codeWriter, ctConstructor);
 
         codeWriter.println(" {");
@@ -159,6 +177,13 @@ public class ClassShovel {
         String returnType = typeMapper.getTypeReference(ctMethod.getType());
         codeWriter.print(returnType);
         codeWriter.print(' ');
+
+        CtType ctType = ctMethod.getDeclaringType();
+        CtType outterType = ctType.getDeclaringType();
+        if (outterType != null) {
+            codeWriter.print(typeMapper.getTypeName(outterType));
+            codeWriter.print("::");
+        }
         codeWriter.print(typeMapper.getTypeName(ctType));
         codeWriter.print("::");
         codeWriter.print(ctMethod.getSimpleName());
@@ -178,17 +203,17 @@ public class ClassShovel {
         if (ctBlock == null) {
             return;
         }
-        System.out.println("BLOCK: " + ctBlock.getParent().toString());
+        //System.out.println("BLOCK: " + ctBlock.getParent().toString());
         for (CtStatement ctStatement : ctBlock.getStatements()) {
-            System.out.println("STATEMENT: " + ctStatement);
+            //System.out.println("STATEMENT: " + ctStatement);
             if (ctStatement.toString().equals("super()")) {
                 for (CtElement ctElement : ctStatement.getElements(new MatchAllFilter<CtElement>())) {
-                    System.out.println("  ELEMENT! " + ctElement.getClass().getSimpleName() + " " + ctElement);
+                    //System.out.println("  ELEMENT! " + ctElement.getClass().getSimpleName() + " " + ctElement);
                 }
                 continue;
             }
             for (CtElement ctElement : ctStatement.getElements(new MatchAllFilter<CtElement>())) {
-                System.out.println("  ELEMENT: " + ctElement.getClass().getSimpleName() + " " + ctElement);
+                //System.out.println("  ELEMENT: " + ctElement.getClass().getSimpleName() + " " + ctElement);
                 addElement(ctElement);
             }
             codeWriter.println(";");
@@ -197,7 +222,7 @@ public class ClassShovel {
 
     private void addClassSignature(CtType ctType) {
         headerWriter.print("class ");
-        headerWriter.print(name);
+        headerWriter.print(typeMapper.getTypeName(ctType));
 
         FirstPrintOptions firstPrintOptions = new FirstPrintOptions(headerWriter, ":", ",");
         CtTypeReference ctTypeReferenceSuper = ctType.getSuperclass();
@@ -387,6 +412,6 @@ public class ClassShovel {
     }
 
     public String toString() {
-        return name;
+        return getName();
     }
 }

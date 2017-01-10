@@ -20,9 +20,10 @@ public class TypeMapper {
         String mappedName = typeMappings.get(javaName);
         if (mappedName == null) {
             mappedName = mapClassName(javaName);
+
             if (typeMappings.containsValue(mappedName)) {
                 // if short mapped name already exists dropback to explicit package_Class format
-                mappedName = javaName.replace(".","_");
+                mappedName = javaName.replace(".", "_");
             }
             typeMappings.put(javaName, mappedName);
         }
@@ -41,6 +42,10 @@ public class TypeMapper {
         int dot = name.lastIndexOf('.');
         if (dot != -1) {
             name = name.substring(dot+1);
+        }
+        int inner = name.lastIndexOf('$');
+        if (inner != -1) {
+            name = name.substring(inner+1);
         }
         return name;
     }

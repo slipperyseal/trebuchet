@@ -1,20 +1,6 @@
 
 #include "universe.h"
 
-Class classScanner = Class("Scanner");
-Class * superScanner[] = {};
-Class classDevice = Class("Device");
-Class * superDevice[] = {};
-Class classLongRangeScanner = Class("LongRangeScanner");
-Class * superLongRangeScanner[] = {&classScanner,&classDevice};
-Class classSpaceship = Class("Spaceship");
-Class * superSpaceship[] = {};
-Class classUniverse = Class("Universe");
-Class * superUniverse[] = {};
-Class classObject = Class("Object");
-Class * superObject[] = {};
-Class classClass = Class("Class");
-Class * superClass[] = {};
 
 /*** trebuchet.equipment.Scanner ***/
 void Scanner::scan() {
@@ -25,6 +11,24 @@ Device::Device() {
 }
 
 void Device::explode() {
+}
+
+/*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
+LongRangeScanner::MyInnerScanner::MyInnerScanner() {
+    this->anotherNumber = 20;
+}
+
+void LongRangeScanner::MyInnerScanner::scanAhoy() {
+    this->anotherNumber = this->anotherNumber + 4;
+}
+
+/*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
+LongRangeScanner::YourInnerScanner::YourInnerScanner() {
+    this->someNumber = 10;
+}
+
+void LongRangeScanner::YourInnerScanner::scanAhoy() {
+    this->someNumber = this->someNumber + 2;
 }
 
 /*** trebuchet.equipment.LongRangeScanner ***/

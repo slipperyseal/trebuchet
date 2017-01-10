@@ -35,6 +35,26 @@ public:
     void setRange(int range);
     void scan();
     int getDeviceId();
+    /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
+    class MyInnerScanner {
+    private:
+        long long anotherNumber;
+    
+    public:
+        MyInnerScanner();
+        void scanAhoy();
+    };
+    
+    /*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
+    class YourInnerScanner {
+    private:
+        long long someNumber;
+    
+    public:
+        YourInnerScanner();
+        void scanAhoy();
+    };
+    
 };
 
 /*** trebuchet.craft.Spaceship ***/

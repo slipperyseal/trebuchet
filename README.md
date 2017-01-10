@@ -33,7 +33,7 @@ Trebuchet uses the Spoon Java source code parser <https://github.com/INRIA/spoon
 
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) `Bean` Parameter Assignment, Return Values, Constructors
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Simple Arithmetic (some working cases)
-- ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Interfaces, Abstract methods
+- ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Interfaces, Abstract methods, Inner Classes
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Static Initializers, Class Field Initializers
 - ![#33ff15](http://placehold.it/15/33ff15/000000?text=+) Incrementing heap allocator with no garbage collection
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) The remaining flow control, assignment and math which is not yet implemented.
@@ -56,7 +56,7 @@ Yet there are some quick wins we can apply in the translation process. Examples.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Do not generate java.lang.Class definitions where the class's definition is never referenced.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Do not extend java.lang.Object (which introduces the overhead of a vtable to all object instances) where never referenced.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Demote heap allocated objects to local scope where reference doesn't escape scope.
-- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Convert regular getters and setters to direct field access.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Convert regular getters and setters to direct field access. (This would be something an optimising compiler does anyway so this might be more of a code style transformation.)
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Disable index and type safety checks when logically safe to do so.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Use of different memory pools or memory managment by type.
 
@@ -111,12 +111,35 @@ The following test case demonstrates a simple code structure featuring interface
             }
 
             public void scan() {
-                range = range + 2;
-                range = range - 1;
+                range = range + 234;
+                range = range - 123;
             }
 
             public int getDeviceId() {
                 return 1337;
+            }
+
+            private class YourInnerScanner {
+                private long someNumber;
+
+                public YourInnerScanner() {
+                    this.someNumber = 10;
+                }
+                public void scanAhoy() {
+                    someNumber = someNumber + 2;
+                }
+            }
+
+            private class MyInnerScanner {
+                private long anotherNumber;
+
+                MyInnerScanner() {
+                    this.anotherNumber = 20;
+                }
+
+                public void scanAhoy() {
+                    this.anotherNumber = this.anotherNumber + 4;
+                }
             }
         }
 
@@ -125,12 +148,6 @@ The following test case demonstrates a simple code structure featuring interface
         }
 
 #### C++ header output
-
-        class Scanner;
-        class Device;
-        class LongRangeScanner;
-        class Spaceship;
-        class Universe;
 
         /*** trebuchet.equipment.Scanner ***/
         class Scanner {
@@ -157,6 +174,26 @@ The following test case demonstrates a simple code structure featuring interface
             void setRange(int range);
             void scan();
             int getDeviceId();
+            /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
+            class MyInnerScanner {
+            private:
+                long long anotherNumber;
+
+            public:
+                MyInnerScanner();
+                void scanAhoy();
+            };
+
+            /*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
+            class YourInnerScanner {
+            private:
+                long long someNumber;
+
+            public:
+                YourInnerScanner();
+                void scanAhoy();
+            };
+
         };
 
         /*** trebuchet.craft.Spaceship ***/
@@ -178,7 +215,37 @@ The following test case demonstrates a simple code structure featuring interface
         class Universe {
         public:
             Universe();
-            static void main(char ** * args);
+            static void main(char * args);
+        };
+
+        /*** java.lang.Object ***/
+        class Object {
+        public:
+            Object();
+            Object * getClass();
+            int hashCode();
+            bool equals(Object * obj);
+        protected:
+            Object * clone();
+        public:
+            const char * toString();
+            void notify();
+            void notifyAll();
+            void wait(long long timeout);
+            void wait(long long timeout, int nanos);
+            void wait();
+        protected:
+            void finalize();
+        };
+
+        /*** Class ***/
+        class Class {
+        private:
+            const char * name;
+
+        public:
+            Class(const char * name);
+            bool isAssignableFrom(Class * type);
         };
 
 #### C++ code output
@@ -194,6 +261,24 @@ The following test case demonstrates a simple code structure featuring interface
         void Device::explode() {
         }
 
+        /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
+        LongRangeScanner::MyInnerScanner::MyInnerScanner() {
+            this->anotherNumber = 20;
+        }
+
+        void LongRangeScanner::MyInnerScanner::scanAhoy() {
+            this->anotherNumber = this->anotherNumber + 4;
+        }
+
+        /*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
+        LongRangeScanner::YourInnerScanner::YourInnerScanner() {
+            this->someNumber = 10;
+        }
+
+        void LongRangeScanner::YourInnerScanner::scanAhoy() {
+            this->someNumber = this->someNumber + 2;
+        }
+
         /*** trebuchet.equipment.LongRangeScanner ***/
         LongRangeScanner::LongRangeScanner() {
         }
@@ -207,8 +292,8 @@ The following test case demonstrates a simple code structure featuring interface
         }
 
         void LongRangeScanner::scan() {
-            this->range = this->range + 2;
-            this->range = this->range - 1;
+            this->range = this->range + 234;
+            this->range = this->range - 123;
         }
 
         int LongRangeScanner::getDeviceId() {
@@ -238,7 +323,7 @@ The following test case demonstrates a simple code structure featuring interface
         Universe::Universe() {
         }
 
-        void Universe::main(char ** * args) {
+        void Universe::main(char * args) {
             ;
         }
 
