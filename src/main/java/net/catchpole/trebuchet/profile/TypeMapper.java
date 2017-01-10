@@ -13,6 +13,8 @@ public class TypeMapper {
         typeMappings.put("java.lang.reflect.Array", "char");
         typeMappings.put("boolean", "bool");
         typeMappings.put("long", "long long");
+        typeMappings.put("char", "short");
+        typeMappings.put("byte", "char");
     }
 
     public String getTypeName(CtTypeInformation ctTypeInformation) {
@@ -23,7 +25,7 @@ public class TypeMapper {
 
             if (typeMappings.containsValue(mappedName)) {
                 // if short mapped name already exists dropback to explicit package_Class format
-                mappedName = javaName.replace(".", "_");
+                mappedName = javaName.replace(".", "_").replace("$", "__");
             }
             typeMappings.put(javaName, mappedName);
         }

@@ -174,6 +174,7 @@ The following test case demonstrates a simple code structure featuring interface
             void setRange(int range);
             void scan();
             int getDeviceId();
+
             /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
             class MyInnerScanner {
             private:
@@ -216,36 +217,6 @@ The following test case demonstrates a simple code structure featuring interface
         public:
             Universe();
             static void main(char * args);
-        };
-
-        /*** java.lang.Object ***/
-        class Object {
-        public:
-            Object();
-            Object * getClass();
-            int hashCode();
-            bool equals(Object * obj);
-        protected:
-            Object * clone();
-        public:
-            const char * toString();
-            void notify();
-            void notifyAll();
-            void wait(long long timeout);
-            void wait(long long timeout, int nanos);
-            void wait();
-        protected:
-            void finalize();
-        };
-
-        /*** Class ***/
-        class Class {
-        private:
-            const char * name;
-
-        public:
-            Class(const char * name);
-            bool isAssignableFrom(Class * type);
         };
 
 #### C++ code output
