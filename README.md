@@ -5,20 +5,19 @@ Trebuchet is a Java to C++ source code translator.
 
 ### ZOMG WHY WOULD YOU DO THAT??
 
-For the most part there is no good reason not to run a Java program on a Java Virtual Machine.
+For the most part there is no good reason not to run a Java program on a Java Virtual Machine or Android Device.
 Modern JVMs provide many benefits and are really really fast.
 
 But sometimes there is a situation where you might want to statically compile your Java program or some parts of it.
-Perhaps you are making a version of your software on a platform which doesn't support a JVM.
-Maybe you need to share a data model or a specific algorithm on a device which your Java server application communicates with.
-It may be you've written a really small utility in Java and it makes sense that this is distributed as a small native executable.
-Or your boss has asked you to port some terrible Java code to some rubbish device.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Cross-platform development such as targeting both Android and iOS.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Porting Java based games to consoles or platforms which rely heavily on native APIs.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Sharing data models and code from your Java server application with non-java devices.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Targeting embedded platforms such as 32 bit microcontollers.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Utilities that make sense distributed as a small native executables. 
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Porting Java code to real-time environments. Code does not not magically become real time but the C++ equivelant of Java can be given clearer fixed time constraints.  
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Trebuchet can be used as a basis for the experiemenation with new memory models and compiler teqniques.  
+
 Pop the code into Trebuchet and pull the handle.
-
-The aim of the project is not to replace a Java Virtual Machine and this project may never implement all of Java's
-features necessary to do that for arbitrary programs.
-
-C++ was chosen as the target language as Java and C++ have enough in common for a reasonably logical translation.
 
 Language transcoders often include a support library to implement language features, garbage collection etc.
 Our approach is to have supply the leanest possible support code but then allow optional extensions for mode advanced features.
@@ -46,6 +45,8 @@ Trebuchet uses the Spoon Java source code parser <https://github.com/INRIA/spoon
 - ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) Custom Collections Implementations
 - ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Reflection, Bytecode Class Loading
 - ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Extensive API support (AWT etc.)
+
+This project may never implement all of Java's features necessary to do that for arbitrary programs. Nor is it the intention of the project to do that.
 
 ### Optimisations
 
