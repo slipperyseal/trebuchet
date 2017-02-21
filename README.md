@@ -46,8 +46,6 @@ Trebuchet uses the Spoon Java source code parser <https://github.com/INRIA/spoon
 - ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Reflection, Bytecode Class Loading
 - ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Extensive API support (AWT etc.)
 
-This project may never implement all of Java's features necessary to do that for arbitrary programs. Nor is it the intention of the project to do that.
-
 ### Optimisations
 
 Modern C++ compilers can produce some amazing optimisations. We will rely on this to do most of the heavy lifting.
