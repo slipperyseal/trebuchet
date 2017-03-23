@@ -12,6 +12,7 @@ But sometimes there is a situation where you might want to statically compile yo
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Cross-platform development such as targeting both Android and iOS.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Porting Java based games to consoles or platforms which rely heavily on native APIs.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Sharing data models and code from your Java server application with non-java devices.
+- ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Moving strategic Java classes to the native side of JNI libraries.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Targeting embedded platforms such as 32 bit microcontollers.
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Utilities that make sense distributed as a small native executables. 
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Porting Java code to real-time environments. Code does not not magically become real time but the C++ equivelant of Java can be given clearer fixed time constraints.  
@@ -41,6 +42,7 @@ Trebuchet uses the Spoon Java source code parser <https://github.com/INRIA/spoon
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Exceptions
 - ![#1589F0](http://placehold.it/15/1589F0/000000?text=+) Generics handling (not templates)
 - ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) Synchronization, Volatile references, Threads
+- ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) JNI Folding (removal of JNI stubs)
 - ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) Alternate Memory Management
 - ![#ecd217](http://placehold.it/15/ecd217/000000?text=+) Custom Collections Implementations
 - ![#f03c15](http://placehold.it/15/f03c15/000000?text=+) Reflection, Bytecode Class Loading
