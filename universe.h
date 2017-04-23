@@ -76,6 +76,7 @@ public:
     Spaceship(LongRangeScanner * longRangeScanner);
     LongRangeScanner * getLongRangeScanner();
     void reset(LongRangeScanner * longRangeScanner, int serialNumber);
+    const char * getName();
 
 };
 

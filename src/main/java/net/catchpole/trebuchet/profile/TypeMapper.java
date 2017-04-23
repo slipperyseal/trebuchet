@@ -21,11 +21,10 @@ public class TypeMapper {
         String javaName = ctTypeInformation.getQualifiedName();
         String mappedName = typeMappings.get(javaName);
         if (mappedName == null) {
-            mappedName = mapClassName(javaName);
-
+            mappedName = mapClassNameShortened(javaName);
             if (typeMappings.containsValue(mappedName)) {
-                // if short mapped name already exists dropback to explicit package_Class format
-                mappedName = javaName.replace(".", "_").replace("$", "__");
+                // if short mapped name already exists dropback to explicit package_Class__InnerClass format
+                mappedName = mapClassNameVerbose(javaName);
             }
             typeMappings.put(javaName, mappedName);
         }
@@ -40,15 +39,19 @@ public class TypeMapper {
         return name;
     }
 
-    private String mapClassName(String name) {
-        int dot = name.lastIndexOf('.');
+    private String mapClassNameShortened(String className) {
+        int innerClass = className.lastIndexOf('$');
+        if (innerClass != -1) {
+            className = className.substring(innerClass+1);
+        }
+        int dot = className.lastIndexOf('.');
         if (dot != -1) {
-            name = name.substring(dot+1);
+            className = className.substring(dot+1);
         }
-        int inner = name.lastIndexOf('$');
-        if (inner != -1) {
-            name = name.substring(inner+1);
-        }
-        return name;
+        return className;
+    }
+
+    private String mapClassNameVerbose(String className) {
+        return className.replace(".", "_").replace("$", "__");
     }
 }

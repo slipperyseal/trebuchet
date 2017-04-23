@@ -71,6 +71,10 @@ void Spaceship::reset(LongRangeScanner * longRangeScanner, int serialNumber) {
     this->serialNumber = serialNumber;
 }
 
+const char * Spaceship::getName() {
+    return this->name;
+}
+
 /*** trebuchet.Universe ***/
 Universe::Universe() {
 }

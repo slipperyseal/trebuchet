@@ -20,4 +20,8 @@ public class Spaceship {
 		this.longRangeScanner = longRangeScanner;
 		this.serialNumber = serialNumber;
 	}
+
+	public String getName() {
+		return name;
+	}
 }
