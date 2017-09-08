@@ -13,33 +13,32 @@ public class LongRangeScanner extends Device implements Scanner {
 
     public void scan() {
         range = range + 234;
-        range = range - 123;
     }
 
     public int getDeviceId() {
         return 1337;
     }
 
-    private class YourInnerScanner {
-        private long someNumber;
+    private class SubspaceScanner implements Scanner {
+        private long subspaceFrequency;
 
-        public YourInnerScanner() {
-            this.someNumber = 10;
+        public SubspaceScanner() {
+            this.subspaceFrequency = 10483298;
         }
-        public void scanAhoy() {
-            someNumber = someNumber + 2;
+        public void scan() {
+            subspaceFrequency = subspaceFrequency + 2;
         }
     }
 
-    private class MyInnerScanner {
-        private long anotherNumber;
+    private class TachyonScanner implements Scanner {
+        private long tachyonDopplerCalibration;
 
-        MyInnerScanner() {
-            this.anotherNumber = 20;
+        TachyonScanner() {
+            this.tachyonDopplerCalibration = -22340;
         }
 
-        public void scanAhoy() {
-            this.anotherNumber = this.anotherNumber + 4;
+        public void scan() {
+            this.tachyonDopplerCalibration = this.tachyonDopplerCalibration + 4;
         }
     }
 }

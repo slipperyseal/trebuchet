@@ -180,7 +180,7 @@ public:
     void scan();
     int getDeviceId();
 
-    /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
+    /*** trebuchet.equipment.LongRangeScanner$TachyonScanner ***/
     class MyInnerScanner {
     private:
         long long anotherNumber;
@@ -190,7 +190,7 @@ public:
         void scanAhoy();
     };
 
-    /*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
+    /*** trebuchet.equipment.LongRangeScanner$SubspaceScanner ***/
     class YourInnerScanner {
     private:
         long long someNumber;
@@ -202,7 +202,7 @@ public:
 
 };
 
-/*** trebuchet.craft.Spaceship ***/
+/*** trebuchet.craft.TowingVessel ***/
 class Spaceship {
 public:
     static int FIRSTSHIP;
@@ -241,7 +241,7 @@ Device::Device() {
 void Device::explode() {
 }
 
-/*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
+/*** trebuchet.equipment.LongRangeScanner$TachyonScanner ***/
 LongRangeScanner::MyInnerScanner::MyInnerScanner() {
     this->anotherNumber = 20;
 }
@@ -250,7 +250,7 @@ void LongRangeScanner::MyInnerScanner::scanAhoy() {
     this->anotherNumber = this->anotherNumber + 4;
 }
 
-/*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
+/*** trebuchet.equipment.LongRangeScanner$SubspaceScanner ***/
 LongRangeScanner::YourInnerScanner::YourInnerScanner() {
     this->someNumber = 10;
 }
@@ -280,7 +280,7 @@ int LongRangeScanner::getDeviceId() {
     return 1337;
 }
 
-/*** trebuchet.craft.Spaceship ***/
+/*** trebuchet.craft.TowingVessel ***/
 int Spaceship::FIRSTSHIP = 100;
 
 Spaceship::Spaceship(LongRangeScanner * longRangeScanner) {

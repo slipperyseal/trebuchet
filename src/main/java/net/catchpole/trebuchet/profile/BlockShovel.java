@@ -3,8 +3,11 @@ package net.catchpole.trebuchet.profile;
 import net.catchpole.trebuchet.code.CodeWriter;
 import net.catchpole.trebuchet.spoon.MatchAllFilter;
 import spoon.reflect.code.CtBlock;
+import spoon.reflect.code.CtComment;
 import spoon.reflect.code.CtStatement;
 import spoon.reflect.declaration.CtElement;
+
+import java.util.List;
 
 public class BlockShovel {
     private CodeWriter codeWriter;
@@ -29,6 +32,10 @@ public class BlockShovel {
                 // skip super() calls for now
                 continue;
             }
+            if (ctStatement instanceof CtComment) {
+                new CommentWriter(codeWriter).write((CtComment)ctStatement);
+            }
+
             for (CtElement ctElement : ctStatement.getElements(new MatchAllFilter<CtElement>())) {
                 System.out.println("        ELEMENT: " + ctElement.getClass().getSimpleName() + " " + ctElement);
                 statementShovel.addElement(ctElement);

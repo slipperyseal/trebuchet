@@ -21,8 +21,8 @@ public class Object {
     }
     
     public String toString() {
-        return null;
         //return getClass().getName() + "@" + Integer.toHexString(hashCode());
+        return null;
     }
     
     public final void notify() { }

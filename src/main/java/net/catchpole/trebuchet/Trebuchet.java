@@ -31,7 +31,7 @@ public class Trebuchet {
 
     public void process(String projectName, String path, OutputStream headerOutputStream, OutputStream codeOutputStream) {
         Launcher launcher = new Launcher();
-        final String[] args = { "--input", path, "--output-type", "nooutput" };
+        final String[] args = { "--input", path, "--output-type", "nooutput", "--enable-comments" };
         launcher.setArgs(args);
         launcher.run();
 

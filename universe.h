@@ -5,7 +5,7 @@
 class Scanner;
 class Device;
 class LongRangeScanner;
-class Spaceship;
+class TowingVessel;
 class Universe;
 class Object;
 class Class;
@@ -39,43 +39,45 @@ public:
     int getDeviceId();
 
 private:
-    /*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
-    class MyInnerScanner {
+    /*** trebuchet.equipment.LongRangeScanner$SubspaceScanner ***/
+    class SubspaceScanner: public Scanner {
     private:
-        long long anotherNumber;
+        long long subspaceFrequency;
     
     public:
-        MyInnerScanner();
-        void scanAhoy();
+        SubspaceScanner();
+        void scan();
     
     };
     
-    /*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
-    class YourInnerScanner {
+    /*** trebuchet.equipment.LongRangeScanner$TachyonScanner ***/
+    class TachyonScanner: public Scanner {
     private:
-        long long someNumber;
+        long long tachyonDopplerCalibration;
     
     public:
-        YourInnerScanner();
-        void scanAhoy();
+        TachyonScanner();
+        void scan();
     
     };
     
 };
 
-/*** trebuchet.craft.Spaceship ***/
-class Spaceship {
+/*** trebuchet.craft.TowingVessel ***/
+class TowingVessel {
 public:
-    static int FIRSTSHIP;
+    static int REGISTRATION;
 private:
+    // We set down on LV-426
     const char * name;
-    int serialNumber;
+    short starfreighterClass;
     LongRangeScanner * longRangeScanner;
 
 public:
-    Spaceship(LongRangeScanner * longRangeScanner);
+    TowingVessel();
+    TowingVessel(LongRangeScanner * longRangeScanner);
     LongRangeScanner * getLongRangeScanner();
-    void reset(LongRangeScanner * longRangeScanner, int serialNumber);
+    void reset(LongRangeScanner * longRangeScanner, short starfreighterClass);
     const char * getName();
 
 };

@@ -52,6 +52,14 @@ public class ClassShovel {
     }
 
     public void addClass() {
+
+        List<CtComment> ctStatementComments = ctType.getComments();
+        if (ctStatementComments != null) {
+            for (CtComment ctComment : ctStatementComments) {
+                new CommentWriter(codeWriter).write(ctComment);
+            }
+        }
+
         headerWriter.print("/*** ");
         headerWriter.print(ctType.getQualifiedName());
         headerWriter.println(" ***/");
@@ -221,6 +229,9 @@ public class ClassShovel {
     private void addField(CtField ctField) {
         addVisibility(ctField.getVisibility());
         headerWriter.indent();
+        for (CtComment ctComment : ctField.getComments()) {
+            new CommentWriter(headerWriter).write(ctComment);
+        }
         if (ctField.getModifiers().contains(ModifierKind.STATIC)) {
             headerWriter.print("static ");
         }

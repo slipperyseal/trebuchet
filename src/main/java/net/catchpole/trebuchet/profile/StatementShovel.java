@@ -8,6 +8,8 @@ import spoon.reflect.reference.CtPackageReference;
 import spoon.reflect.reference.CtParameterReference;
 import spoon.reflect.reference.CtTypeReference;
 
+import java.util.List;
+
 public class StatementShovel {
     private static BinaryOperatorMapping binaryOperatorMapping = new BinaryOperatorMapping();
 
@@ -35,6 +37,11 @@ public class StatementShovel {
     }
 
     public void addElement(CtElement ctElement) {
+        List<CtComment> comments = ctElement.getComments();
+        for (CtComment ctComment : comments) {
+            new CommentWriter(codeWriter).write(ctComment);
+        }
+
         if (ctElement instanceof CtReturn) {
             codeWriter.print("return ");
         }

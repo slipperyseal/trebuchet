@@ -13,22 +13,22 @@ Device::Device() {
 void Device::explode() {
 }
 
-/*** trebuchet.equipment.LongRangeScanner$MyInnerScanner ***/
-LongRangeScanner::MyInnerScanner::MyInnerScanner() {
-    this->anotherNumber = 20;
+/*** trebuchet.equipment.LongRangeScanner$SubspaceScanner ***/
+LongRangeScanner::SubspaceScanner::SubspaceScanner() {
+    this->subspaceFrequency = 10483298;
 }
 
-void LongRangeScanner::MyInnerScanner::scanAhoy() {
-    this->anotherNumber = this->anotherNumber + 4;
+void LongRangeScanner::SubspaceScanner::scan() {
+    this->subspaceFrequency = this->subspaceFrequency + 2;
 }
 
-/*** trebuchet.equipment.LongRangeScanner$YourInnerScanner ***/
-LongRangeScanner::YourInnerScanner::YourInnerScanner() {
-    this->someNumber = 10;
+/*** trebuchet.equipment.LongRangeScanner$TachyonScanner ***/
+LongRangeScanner::TachyonScanner::TachyonScanner() {
+    this->tachyonDopplerCalibration = 22340;
 }
 
-void LongRangeScanner::YourInnerScanner::scanAhoy() {
-    this->someNumber = this->someNumber + 2;
+void LongRangeScanner::TachyonScanner::scan() {
+    this->tachyonDopplerCalibration = this->tachyonDopplerCalibration + 4;
 }
 
 /*** trebuchet.equipment.LongRangeScanner ***/
@@ -45,33 +45,44 @@ void LongRangeScanner::setRange(int range) {
 
 void LongRangeScanner::scan() {
     this->range = this->range + 234;
-    this->range = this->range - 123;
 }
 
 int LongRangeScanner::getDeviceId() {
     return 1337;
 }
 
-/*** trebuchet.craft.Spaceship ***/
-int Spaceship::FIRSTSHIP = 100;
+/*
+The USCSS Nostromo (reg. 180924609) was a $42 million (and adjusted) commercial
+towing vessel owned by the Weyland-Yutani Corporation, a Lockmart CM 88B
+Bison M-Class starfreighter used as a commercial hauler between Thedus and Earth.
+*/
+/*** trebuchet.craft.TowingVessel ***/
+int TowingVessel::REGISTRATION = 180924609;
 
-Spaceship::Spaceship(LongRangeScanner * longRangeScanner) {
+TowingVessel::TowingVessel() {
     this->name = "Nostromo";
-    this->serialNumber = 120;
+    this->starfreighterClass = 'M';
+    
+}
+
+TowingVessel::TowingVessel(LongRangeScanner * longRangeScanner) {
+    this->name = "Nostromo";
+    this->starfreighterClass = 'M';
     
     this->longRangeScanner = longRangeScanner;
 }
 
-LongRangeScanner * Spaceship::getLongRangeScanner() {
+LongRangeScanner * TowingVessel::getLongRangeScanner() {
     return this->longRangeScanner;
 }
 
-void Spaceship::reset(LongRangeScanner * longRangeScanner, int serialNumber) {
+void TowingVessel::reset(LongRangeScanner * longRangeScanner, short starfreighterClass) {
+    // Don't call this method when above light speed.
     this->longRangeScanner = longRangeScanner;
-    this->serialNumber = serialNumber;
+    this->starfreighterClass = starfreighterClass;
 }
 
-const char * Spaceship::getName() {
+const char * TowingVessel::getName() {
     return this->name;
 }
 
@@ -101,6 +112,7 @@ int Object::hashCode() {
 }
 
 bool Object::equals(Object * obj) {
+    // return (this == obj);
     return false;
 }
 
@@ -109,6 +121,7 @@ Object * Object::clone() {
 }
 
 const char * Object::toString() {
+    // return getClass().getName() + "@" + Integer.toHexString(hashCode());
     return 0;
 }
 
